@@ -19,10 +19,15 @@ yarn add cozy-app-publish
 
 ### Usage via Travis CI
 
+First of all, don't forget to build your application:
 ```
 # build your application in your ./build folder
 yarn build
+```
+
+Then, just publish it using your Travis CI workflow:
+```
 # publish it, REGISTRY_TOKEN should be
 # encrypted and provided via Travis CI environment
-cozy-app-publish --editor myname --token $REGISTRY_TOKEN
+cozy-app-publish --travis --editor myname --token $REGISTRY_TOKEN
 ```

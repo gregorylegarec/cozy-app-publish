@@ -53,6 +53,9 @@ publishApp({
 
 function publishApp (cliOptions) {
   if (cliOptions.travis) {
+    console.log()
+    console.log(`${colorize.bold('Travis')} ${colorize.blue('publish mode')}`)
+    console.log()
     scripts.travis({
       editor: cliOptions.editor,
       token: cliOptions.token,
@@ -63,7 +66,7 @@ function publishApp (cliOptions) {
     })
   } else {
     console.log()
-    console.log(colorize.blue('Manual mode usage.'))
+    console.log(`${colorize.bold('Manual')} ${colorize.blue('publish mode')}`)
     console.log()
     scripts.manual({
       editor: cliOptions.editor,
@@ -75,5 +78,4 @@ function publishApp (cliOptions) {
       verbose: cliOptions.verbose
     })
   }
-  process.exit(0)
 }
