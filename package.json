@@ -1,0 +1,26 @@
+{
+  "name": "cozy-app-publish",
+  "version": "0.1.0",
+  "main": "index.js",
+  "author": "Cozy",
+  "license": "MIT",
+  "bin": {
+    "cozy-app-publish": "./cozy-app-publish.js"
+  },
+  "dependencies": {
+    "chalk": "^2.3.2",
+    "commander": "^2.15.0",
+    "cross-spawn": "^6.0.5",
+    "fs-extra": "^5.0.0",
+    "node-fetch": "^2.1.1",
+    "prompt": "^1.0.0"
+  },
+  "files": [
+    "index.js",
+    "cozy-app-publish.js",
+    "LICENSE",
+    "README.md",
+    "utils",
+    "lib"
+  ]
+}
