@@ -6,12 +6,14 @@ exports[`Publish script (helper) should handle error message if the publishing f
 
 exports[`Publish script (helper) should work correctly if expected options provided 1`] = `
 Object {
-  "body": "{\\"editor\\":\\"cozy\\",\\"version\\":\\"2.1.8-dev.12345\\",\\"url\\":\\"https://mock.getarchive.cc/12345.tar.gz\\",\\"sha256\\":\\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\",\\"type\\":\\"webapp\\"}",
   "fetchURL": "https://mock.registry.cc/registry/mock-app",
-  "headers": Object {
-    "Authorization": "Token registryTokenForTest123",
-    "Content-Type": "application/json",
+  "options": Object {
+    "body": "{\\"editor\\":\\"cozy\\",\\"version\\":\\"2.1.8-dev.12345\\",\\"url\\":\\"https://mock.getarchive.cc/12345.tar.gz\\",\\"sha256\\":\\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\",\\"type\\":\\"webapp\\"}",
+    "headers": Object {
+      "Authorization": "Token registryTokenForTest123",
+      "Content-Type": "application/json",
+    },
+    "method": "POST",
   },
-  "method": "POST",
 }
 `;

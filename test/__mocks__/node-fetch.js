@@ -15,12 +15,12 @@ function fetch (url, options) {
             return resolve({
               status: 404,
               statusText: '(TEST) Not Found',
-              json: () => ({ error: 'Application slug not found' })
+              json: () => Promise.resolve(({ error: 'Application slug not found' }))
             })
           }
           expect({
             fetchURL: url,
-            ...options
+            options
           }).toMatchSnapshot()
           return resolve({ status: 201 })
         }

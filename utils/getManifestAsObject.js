@@ -3,7 +3,6 @@ const path = require('path')
 const colorize = require('./colorize')
 
 function getManifestAsObject (buildDirPath) {
-  console.log(buildDirPath)
   let manifestName = null
   if (fs.existsSync(
     path.join(
