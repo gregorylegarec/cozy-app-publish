@@ -57,9 +57,9 @@ function publishApp (cliOptions) {
     console.log(`${colorize.bold('Travis')} ${colorize.blue('publish mode')}`)
     console.log()
     scripts.travis({
-      editor: cliOptions.editor,
-      token: cliOptions.token,
-      onBranch: cliOptions.onBranch,
+      registryEditor: cliOptions.editor,
+      registryToken: cliOptions.token,
+      branchName: cliOptions.onBranch,
       buildDir: cliOptions.buildDir,
       registryUrl: cliOptions.registryUrl,
       verbose: cliOptions.verbose
@@ -69,10 +69,10 @@ function publishApp (cliOptions) {
     console.log(`${colorize.bold('Manual')} ${colorize.blue('publish mode')}`)
     console.log()
     scripts.manual({
-      editor: cliOptions.editor,
-      token: cliOptions.token,
+      registryEditor: cliOptions.editor,
+      registryToken: cliOptions.token,
       buildDir: cliOptions.buildDir,
-      buildUrl: cliOptions.buildUrl,
+      appBuildUrl: cliOptions.buildUrl,
       manualVersion: cliOptions.manualVersion,
       registryUrl: cliOptions.registryUrl,
       verbose: cliOptions.verbose
