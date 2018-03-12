@@ -4,6 +4,12 @@
   "main": "index.js",
   "author": "Cozy",
   "license": "MIT",
+  "scripts": {
+    "test": "jest --verbose",
+    "test:manual": "jest test/manual.spec.js",
+    "test:publish": "jest test/publish.spec.js",
+    "test:travis": "jest test/travis.spec.js"
+  },
   "bin": {
     "cozy-app-publish": "./cozy-app-publish.js"
   },
