@@ -1,4 +1,5 @@
 # Cozy App Publish
+![https://npmjs.org/package/cozy-app-publish](https://img.shields.io/npm/v/cozy-app-publish.svg)
 ![https://github.com/cozy/cozy-app-publish/LICENSE](https://img.shields.io/npm/l/cozy-app-publish.svg)
 ![https://travis-ci.org/cozy/cozy-app-publish](https://img.shields.io/travis/cozy/cozy-app-publish.svg)
 ![https://npmjs.org/package/cozy-app-publish](https://img.shields.io/npm/dm/cozy-app-publish.svg)
