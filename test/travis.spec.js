@@ -46,6 +46,16 @@ jest.doMock('../utils/getTravisVariables', () =>
   }))
   .mockImplementationOnce(() => ({
     TRAVIS_PULL_REQUEST: 'false',
+    TRAVIS_BRANCH: 'build',
+    TRAVIS_BUILD_DIR: '.',
+    TRAVIS_TAG: null,
+    TRAVIS_COMMIT: commons.commitHash,
+    TRAVIS_REPO_SLUG: commons.slug,
+    // encrypted variables
+    REGISTRY_TOKEN: commons.token
+  }))
+  .mockImplementationOnce(() => ({
+    TRAVIS_PULL_REQUEST: 'false',
     TRAVIS_BRANCH: 'master',
     TRAVIS_BUILD_DIR: '.',
     TRAVIS_TAG: null,
@@ -92,6 +102,7 @@ function getOptions (editor, branchName) {
   const options = {
     registryEditor: editor,
     branchName: branchName || 'build',
+    spaceName: 'mock_space',
     travis: true
   }
   return options
@@ -129,6 +140,18 @@ describe('Travis publishing script', () => {
 
   it('should work correctly with TRAVIS_TAG', (done) => {
     travisScript(getOptions(commons.editor), (error) => {
+      // we use done callback to avoid process.exit which will kill the jest process
+      expect(error).toBeUndefined()
+      expect(publishLib).toHaveBeenCalledTimes(1)
+      expect(publishLib.mock.calls[0][0]).toMatchSnapshot()
+      done()
+    })
+  })
+
+  it('should work correctly if no space name provided', (done) => {
+    const options = getOptions(commons.editor)
+    delete options.spaceName
+    travisScript(options, (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).toHaveBeenCalledTimes(1)

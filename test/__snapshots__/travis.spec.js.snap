@@ -14,6 +14,21 @@ Object {
   "registryToken": "registryTokenForTest123",
   "registryUrl": "https://staging-apps-registry.cozycloud.cc",
   "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "spaceName": "mock_space",
+}
+`;
+
+exports[`Travis publishing script should work correctly if no space name provided 1`] = `
+Object {
+  "appBuildUrl": "https://github.com/mock-app/archive/f4a98378271c17e91faa9e70a2718c34c04cfc27.tar.gz",
+  "appSlug": "mock-app",
+  "appType": "webapp",
+  "appVersion": "2.1.8-dev.f4a98378271c17e91faa9e70a2718c34c04cfc27",
+  "registryEditor": "cozy",
+  "registryToken": "registryTokenForTest123",
+  "registryUrl": "https://staging-apps-registry.cozycloud.cc",
+  "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "spaceName": undefined,
 }
 `;
 
@@ -27,5 +42,6 @@ Object {
   "registryToken": "registryTokenForTest123",
   "registryUrl": "https://staging-apps-registry.cozycloud.cc",
   "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "spaceName": "mock_space",
 }
 `;

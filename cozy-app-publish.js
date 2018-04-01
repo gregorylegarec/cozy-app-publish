@@ -24,6 +24,7 @@ const program = new commander.Command(pkg.name)
   .usage(`[options]`)
   .option('--editor <editor-name>', 'the registry editor to publish as (required)')
   .option('--token <editor-token>', 'the registry token matching the provided editor (required)')
+  .option('--space <space-name>', 'the registry space name to publish the applicationt to (default __default__)')
   .option('--build-dir <path>', 'path fo the build directory relative to the current directory (default ./build)')
   .option('--build-url <url>', 'URL of the application archive')
   .option('--manual-version <version>', 'publishing a specific version manually (must not be already published in the registry)')
@@ -47,6 +48,7 @@ publishApp({
   manualVersion: program.manualVersion,
   onBranch: program.onBranch,
   registryUrl: program.registryUrl,
+  space: program.space,
   travis: program.travis,
   verbose: program.verbose
 })
@@ -62,6 +64,7 @@ function publishApp (cliOptions) {
       branchName: cliOptions.onBranch,
       buildDir: cliOptions.buildDir,
       registryUrl: cliOptions.registryUrl,
+      spaceName: cliOptions.space,
       verbose: cliOptions.verbose
     })
   } else {
@@ -75,6 +78,7 @@ function publishApp (cliOptions) {
       appBuildUrl: cliOptions.buildUrl,
       manualVersion: cliOptions.manualVersion,
       registryUrl: cliOptions.registryUrl,
+      spaceName: cliOptions.space,
       verbose: cliOptions.verbose
     })
   }
