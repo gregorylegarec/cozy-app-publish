@@ -13,6 +13,7 @@ function getOptions (buildDir, error) {
     appBuildUrl: 'https://mock.getarchive.cc/12345.tar.gz',
     appVersion: '2.1.8-dev.12345',
     registryUrl: 'https://mock.registry.cc',
+    spaceName: 'mock_space',
     appType: 'webapp',
     sha256Sum: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
   }
@@ -27,6 +28,16 @@ describe('Publish script (helper)', () => {
 
   it('should work correctly if expected options provided', (done) => {
     publish(getOptions(), () => {
+      // we use done callback to avoid process.exit which will kill the jest process
+      expect(fetchFunction).toHaveBeenCalledTimes(1)
+      done()
+    })
+  })
+
+  it('should work correctly if no space name provided', (done) => {
+    const options = getOptions()
+    delete options.spaceName
+    publish(options, () => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(fetchFunction).toHaveBeenCalledTimes(1)
       done()

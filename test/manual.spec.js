@@ -25,7 +25,8 @@ function getOptions (editor, token, buildDir) {
     registryToken: token,
     appBuildUrl: 'https://mock.getarchive.cc/12345.tar.gz',
     manualVersion: '2.1.8-dev.12345',
-    registryUrl: 'https://mock.registry.cc'
+    registryUrl: 'https://mock.registry.cc',
+    spaceName: 'mock_space'
   }
   if (buildDir) options.buildDir = buildDir
   return options
@@ -63,6 +64,18 @@ describe('Manual publishing script', () => {
 
   it('should work correctly with default buildDir value "build"', (done) => {
     manualScript(getOptions(commons.editor, commons.token), { confirm: 'yes' }, (error) => {
+      // we use done callback to avoid process.exit which will kill the jest process
+      expect(error).toBeUndefined()
+      expect(publishLib).toHaveBeenCalledTimes(1)
+      expect(publishLib.mock.calls[0][0]).toMatchSnapshot()
+      done()
+    })
+  })
+
+  it('should work correctly if no space name provided', (done) => {
+    const options = getOptions(commons.editor, commons.token)
+    delete options.spaceName
+    manualScript(options, { confirm: 'yes' }, (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).toHaveBeenCalledTimes(1)
