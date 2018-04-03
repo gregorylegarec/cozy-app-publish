@@ -12,7 +12,7 @@ Object {
   "appVersion": "2.1.8-dev.f4a98378271c17e91faa9e70a2718c34c04cfc27",
   "registryEditor": "cozy",
   "registryToken": "registryTokenForTest123",
-  "registryUrl": "https://staging-apps-registry.cozycloud.cc",
+  "registryUrl": "https://apps-registry.cozycloud.cc",
   "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "spaceName": "mock_space",
 }
@@ -26,7 +26,7 @@ Object {
   "appVersion": "2.1.8-dev.f4a98378271c17e91faa9e70a2718c34c04cfc27",
   "registryEditor": "cozy",
   "registryToken": "registryTokenForTest123",
-  "registryUrl": "https://staging-apps-registry.cozycloud.cc",
+  "registryUrl": "https://apps-registry.cozycloud.cc",
   "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "spaceName": undefined,
 }
@@ -40,7 +40,7 @@ Object {
   "appVersion": "2.1.8",
   "registryEditor": "cozy",
   "registryToken": "registryTokenForTest123",
-  "registryUrl": "https://staging-apps-registry.cozycloud.cc",
+  "registryUrl": "https://apps-registry.cozycloud.cc",
   "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
   "spaceName": "mock_space",
 }
