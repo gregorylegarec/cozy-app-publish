@@ -83,6 +83,10 @@ In the manual mode, we don't have a way to compute the version like in the Travi
 
 The url of the registry, by default it will be https://staging-apps-registry.cozycloud.cc.
 
+##### `--space`
+
+Use this options to provide a specific space name of the registry to publish the application in. By default it will be published in the default space.
+
 ##### `--travis`
 
 Enable this option will make this tool use the dedicated script for Travis CI environment.
