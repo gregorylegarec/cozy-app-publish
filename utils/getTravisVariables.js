@@ -3,8 +3,6 @@ function getTravisVariables () {
   const getEnv = (name) => process.env[name]
 
   return {
-    TRAVIS_PULL_REQUEST: getEnv('TRAVIS_PULL_REQUEST'),
-    TRAVIS_BRANCH: getEnv('TRAVIS_BRANCH'),
     TRAVIS_BUILD_DIR: getEnv('TRAVIS_BUILD_DIR'),
     TRAVIS_TAG: getEnv('TRAVIS_TAG'),
     TRAVIS_COMMIT: getEnv('TRAVIS_COMMIT'),

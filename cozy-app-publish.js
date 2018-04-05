@@ -27,7 +27,6 @@ const program = new commander.Command(pkg.name)
   .option('--build-dir <path>', 'path fo the build directory relative to the current directory (default ./build)')
   .option('--build-url <url>', 'URL of the application archive')
   .option('--manual-version <version>', 'publishing a specific version manually (must not be already published in the registry)')
-  .option('--on-branch <branch-name>', 'the branch name to run this script on (default: master)')
   .option('--registry-url <url>', 'the registry URL to publish to a different one from the default URL')
   .option('--travis', 'use the script dedicated for Travis CI environments')
   .option('--verbose', 'print additional logs')
@@ -44,7 +43,6 @@ publishApp({
   buildDir: program.buildDir,
   buildUrl: program.buildUrl,
   manualVersion: program.manualVersion,
-  onBranch: program.onBranch,
   registryUrl: program.registryUrl,
   space: program.space,
   travis: program.travis,
@@ -58,7 +56,6 @@ function publishApp (cliOptions) {
     console.log()
     scripts.travis({
       registryToken: cliOptions.token,
-      branchName: cliOptions.onBranch,
       buildDir: cliOptions.buildDir,
       registryUrl: cliOptions.registryUrl,
       spaceName: cliOptions.space,
