@@ -8,6 +8,11 @@ const scripts = require('./index')
 
 const pkg = require('./package.json')
 
+const MODES = {
+  TRAVIS: 'travis',
+  MANUAL: 'manual'
+}
+
 var currentNodeVersion = process.versions.node
 var semver = currentNodeVersion.split('.')
 var major = semver[0]
@@ -24,11 +29,10 @@ const program = new commander.Command(pkg.name)
   .usage(`[options]`)
   .option('--token <editor-token>', 'the registry token matching the provided editor (required)')
   .option('--space <space-name>', 'the registry space name to publish the application to (default __default__)')
-  .option('--build-dir <path>', 'path fo the build directory relative to the current directory (default ./build)')
+  .option('--build-dir <relative-path>', 'path fo the build directory relative to the current directory (default ./build)')
   .option('--build-url <url>', 'URL of the application archive')
   .option('--manual-version <version>', 'publishing a specific version manually (must not be already published in the registry)')
   .option('--registry-url <url>', 'the registry URL to publish to a different one from the default URL')
-  .option('--travis', 'use the script dedicated for Travis CI environments')
   .option('--verbose', 'print additional logs')
   .on('--help', () => {
     console.log()
@@ -45,12 +49,20 @@ publishApp({
   manualVersion: program.manualVersion,
   registryUrl: program.registryUrl,
   space: program.space,
-  travis: program.travis,
   verbose: program.verbose
 })
 
+function _getPublishMode () {
+  if (process.env.TRAVIS === 'true') {
+    return MODES.TRAVIS
+  } else { // default mode
+    return MODES.MANUAL
+  }
+}
+
 function publishApp (cliOptions) {
-  if (cliOptions.travis) {
+  const publishMode = _getPublishMode()
+  if (publishMode === MODES.TRAVIS) {
     console.log()
     console.log(`${colorize.bold('Travis')} ${colorize.blue('publish mode')}`)
     console.log()
@@ -61,7 +73,7 @@ function publishApp (cliOptions) {
       spaceName: cliOptions.space,
       verbose: cliOptions.verbose
     })
-  } else {
+  } else if (publishMode === MODES.MANUAL) {
     console.log()
     console.log(`${colorize.bold('Manual')} ${colorize.blue('publish mode')}`)
     console.log()
@@ -74,5 +86,9 @@ function publishApp (cliOptions) {
       spaceName: cliOptions.space,
       verbose: cliOptions.verbose
     })
+  } else {
+    // no modes found or detected (should not happen since we have default mode)
+    console.log()
+    throw new Error('No modes found or detected. Publishing failed.')
   }
 }
