@@ -22,7 +22,6 @@ if (major < 6) {
 const program = new commander.Command(pkg.name)
   .version(pkg.version)
   .usage(`[options]`)
-  .option('--editor <editor-name>', 'the registry editor to publish as (required)')
   .option('--token <editor-token>', 'the registry token matching the provided editor (required)')
   .option('--space <space-name>', 'the registry space name to publish the application to (default __default__)')
   .option('--build-dir <path>', 'path fo the build directory relative to the current directory (default ./build)')
@@ -41,7 +40,6 @@ const program = new commander.Command(pkg.name)
   .parse(process.argv)
 
 publishApp({
-  editor: program.editor,
   token: program.token,
   buildDir: program.buildDir,
   buildUrl: program.buildUrl,
@@ -59,7 +57,6 @@ function publishApp (cliOptions) {
     console.log(`${colorize.bold('Travis')} ${colorize.blue('publish mode')}`)
     console.log()
     scripts.travis({
-      registryEditor: cliOptions.editor,
       registryToken: cliOptions.token,
       branchName: cliOptions.onBranch,
       buildDir: cliOptions.buildDir,
@@ -72,7 +69,6 @@ function publishApp (cliOptions) {
     console.log(`${colorize.bold('Manual')} ${colorize.blue('publish mode')}`)
     console.log()
     scripts.manual({
-      registryEditor: cliOptions.editor,
       registryToken: cliOptions.token,
       buildDir: cliOptions.buildDir,
       appBuildUrl: cliOptions.buildUrl,

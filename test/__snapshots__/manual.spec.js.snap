@@ -2,8 +2,6 @@
 
 exports[`Manual publishing script should handle error message if the publishing is canceled by the user via the prompt 1`] = `"Publishing manually canceled."`;
 
-exports[`Manual publishing script should throw an error if the editor is missing 1`] = `"Registry editor is missing. Publishing failed."`;
-
 exports[`Manual publishing script should throw an error if the token is missing 1`] = `"Registry token is missing. Publishing failed."`;
 
 exports[`Manual publishing script should work correctly if expected options provided 1`] = `
@@ -12,7 +10,7 @@ Object {
   "appSlug": "mock-app",
   "appType": "webapp",
   "appVersion": "2.1.8-dev.12345",
-  "registryEditor": "cozy",
+  "registryEditor": "Cozy",
   "registryToken": "registryTokenForTest123",
   "registryUrl": "https://mock.registry.cc",
   "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -26,7 +24,7 @@ Object {
   "appSlug": "mock-app",
   "appType": "webapp",
   "appVersion": "2.1.8-dev.12345",
-  "registryEditor": "cozy",
+  "registryEditor": "Cozy",
   "registryToken": "registryTokenForTest123",
   "registryUrl": "https://mock.registry.cc",
   "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -40,7 +38,7 @@ Object {
   "appSlug": "mock-app",
   "appType": "webapp",
   "appVersion": "2.1.8-dev.12345",
-  "registryEditor": "cozy",
+  "registryEditor": "Cozy",
   "registryToken": "registryTokenForTest123",
   "registryUrl": "https://mock.registry.cc",
   "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",

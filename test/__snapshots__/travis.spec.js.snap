@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Travis publishing script should throw an error if the editor is missing 1`] = `"Registry editor is missing. Publishing failed."`;
-
 exports[`Travis publishing script should throw an error if the token is missing 1`] = `"Registry token is missing. Publishing failed."`;
 
 exports[`Travis publishing script should work correctly if Travis environment variable provided (no TRAVIS_TAG) 1`] = `
@@ -10,7 +8,7 @@ Object {
   "appSlug": "mock-app",
   "appType": "webapp",
   "appVersion": "2.1.8-dev.f4a98378271c17e91faa9e70a2718c34c04cfc27",
-  "registryEditor": "cozy",
+  "registryEditor": "Cozy",
   "registryToken": "registryTokenForTest123",
   "registryUrl": "https://apps-registry.cozycloud.cc",
   "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -24,7 +22,7 @@ Object {
   "appSlug": "mock-app",
   "appType": "webapp",
   "appVersion": "2.1.8-dev.f4a98378271c17e91faa9e70a2718c34c04cfc27",
-  "registryEditor": "cozy",
+  "registryEditor": "Cozy",
   "registryToken": "registryTokenForTest123",
   "registryUrl": "https://apps-registry.cozycloud.cc",
   "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -38,7 +36,7 @@ Object {
   "appSlug": "mock-app",
   "appType": "webapp",
   "appVersion": "2.1.8",
-  "registryEditor": "cozy",
+  "registryEditor": "Cozy",
   "registryToken": "registryTokenForTest123",
   "registryUrl": "https://apps-registry.cozycloud.cc",
   "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
