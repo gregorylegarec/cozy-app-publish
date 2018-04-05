@@ -35,7 +35,6 @@ Then, just publish it using the Travis CI workflow:
 # publish it, REGISTRY_TOKEN should be
 # encrypted and provided via Travis CI environment
 yarn cozy-app-publish \
---editor myname \
 --token $REGISTRY_TOKEN
 ```
 
@@ -50,7 +49,6 @@ yarn build
 Then, just publish it using:
 ```
 yarn cozy-app-publish \
---editor myname \
 --token $REGISTRY_TOKEN
 --build-url https://github.com/cozy/cozy-collect/archive/042cef26d9d33ea604fe4364eaab569980b500c9.tar.gz \
 --manual-version 1.0.2-dev.042cef26d9d33ea604fe4364eaab569980b500c9
@@ -81,10 +79,6 @@ The url of the registry, by default it will be https://staging-apps-registry.coz
 ##### `--space <space-name>`
 
 Use this options to provide a specific space name of the registry to publish the application in. By default it will be published in the default space.
-
-##### `--mode <mode>`
-
-Use this parameter if you want to overwrite the automatic mode detection and force using a specific mode as `manual` for example.
 
 ##### `--verbose`
 

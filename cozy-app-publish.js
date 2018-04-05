@@ -34,7 +34,6 @@ const program = new commander.Command(pkg.name)
   .option('--manual-version <version>', 'publishing a specific version manually (must not be already published in the registry)')
   .option('--on-branch <branch-name>', 'the branch name to run this script on (default: master)')
   .option('--registry-url <url>', 'the registry URL to publish to a different one from the default URL')
-  .option('--mode <mode>', 'overwrite the automatic mode detection to force using a specific mode')
   .option('--verbose', 'print additional logs')
   .on('--help', () => {
     console.log()
@@ -52,30 +51,19 @@ publishApp({
   onBranch: program.onBranch,
   registryUrl: program.registryUrl,
   space: program.space,
-  mode: program.mode,
   verbose: program.verbose
 })
 
-function _getPublishMode (modeOption) {
-  let modeUsage = null
-  switch (modeOption) { // overwriting using the CLI option
-    case MODES.TRAVIS:
-    case MODES.MANUAL:
-      modeUsage = modeOption
-      break
+function _getPublishMode () {
+  if (process.env.TRAVIS === 'true') {
+    return MODES.TRAVIS
+  } else { // default mode
+    return MODES.MANUAL
   }
-  if (!modeUsage) { // auto detection if no CLI option provided
-    if (process.env.TRAVIS === 'true') {
-      modeUsage = MODES.TRAVIS
-    } else { // default mode
-      modeUsage = MODES.MANUAL
-    }
-  }
-  return modeUsage
 }
 
 function publishApp (cliOptions) {
-  const publishMode = _getPublishMode(cliOptions.mode)
+  const publishMode = _getPublishMode()
   if (publishMode === MODES.TRAVIS) {
     console.log()
     console.log(`${colorize.bold('Travis')} ${colorize.blue('publish mode')}`)
