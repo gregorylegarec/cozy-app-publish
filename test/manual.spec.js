@@ -15,13 +15,11 @@ jest.mock('../lib/publish', () => jest.fn((options, finishCallback) => {
 }))
 
 const commons = {
-  editor: 'cozy',
   token: 'registryTokenForTest123'
 }
 
-function getOptions (editor, token, buildDir) {
+function getOptions (token, buildDir) {
   const options = {
-    registryEditor: editor,
     registryToken: token,
     appBuildUrl: 'https://mock.getarchive.cc/12345.tar.gz',
     manualVersion: '2.1.8-dev.12345',
@@ -53,7 +51,7 @@ describe('Manual publishing script', () => {
   })
 
   it('should work correctly if expected options provided', (done) => {
-    manualScript(getOptions(commons.editor, commons.token, './build'), { confirm: 'yes' }, (error) => {
+    manualScript(getOptions(commons.token, './build'), { confirm: 'yes' }, (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).toHaveBeenCalledTimes(1)
@@ -63,7 +61,7 @@ describe('Manual publishing script', () => {
   })
 
   it('should work correctly with default buildDir value "build"', (done) => {
-    manualScript(getOptions(commons.editor, commons.token), { confirm: 'yes' }, (error) => {
+    manualScript(getOptions(commons.token), { confirm: 'yes' }, (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).toHaveBeenCalledTimes(1)
@@ -73,7 +71,7 @@ describe('Manual publishing script', () => {
   })
 
   it('should work correctly if no space name provided', (done) => {
-    const options = getOptions(commons.editor, commons.token)
+    const options = getOptions(commons.token)
     delete options.spaceName
     manualScript(options, { confirm: 'yes' }, (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
@@ -85,7 +83,7 @@ describe('Manual publishing script', () => {
   })
 
   it('should handle error message if the publishing is canceled by the user via the prompt', (done) => {
-    manualScript(getOptions(commons.editor, commons.token), { confirm: 'no' }, (error) => {
+    manualScript(getOptions(commons.token), { confirm: 'no' }, (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error.message).toMatchSnapshot()
       expect(publishLib).toHaveBeenCalledTimes(0)
@@ -93,15 +91,9 @@ describe('Manual publishing script', () => {
     })
   })
 
-  it('should throw an error if the editor is missing', () => {
-    expect(() => manualScript(
-      getOptions(null, commons.token), jest.fn())
-    ).toThrowErrorMatchingSnapshot()
-  })
-
   it('should throw an error if the token is missing', () => {
     expect(() => manualScript(
-      getOptions(commons.editor, null), jest.fn())
+      getOptions(null), jest.fn())
     ).toThrowErrorMatchingSnapshot()
   })
 })

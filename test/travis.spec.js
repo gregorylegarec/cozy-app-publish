@@ -13,7 +13,6 @@ const commons = {
   token: 'registryTokenForTest123',
   slug: 'mock-app',
   commitHash: 'f4a98378271c17e91faa9e70a2718c34c04cfc27',
-  editor: 'cozy',
   branchName: 'build',
   buildDir: mockAppDir
 }
@@ -79,25 +78,14 @@ jest.doMock('../utils/getTravisVariables', () =>
     TRAVIS_COMMIT: commons.commitHash,
     TRAVIS_REPO_SLUG: commons.slug,
     // encrypted variables
-    REGISTRY_TOKEN: commons.token
-  }))
-  .mockImplementationOnce(() => ({
-    TRAVIS_PULL_REQUEST: 'false',
-    TRAVIS_BRANCH: 'build',
-    TRAVIS_BUILD_DIR: commons.buildDir,
-    TRAVIS_TAG: null,
-    TRAVIS_COMMIT: commons.commitHash,
-    TRAVIS_REPO_SLUG: commons.slug,
-    // encrypted variables
     REGISTRY_TOKEN: ''
   }))
 )
 
 const travisScript = require('../lib/travis')
 
-function getOptions (editor, branchName) {
+function getOptions (branchName) {
   const options = {
-    registryEditor: editor,
     branchName: branchName || 'build',
     spaceName: 'mock_space',
     travis: true
@@ -111,7 +99,7 @@ describe('Travis publishing script', () => {
   })
 
   it('should work correctly if Travis environment variable provided (no TRAVIS_TAG)', (done) => {
-    travisScript(getOptions(commons.editor), (error) => {
+    travisScript(getOptions(), (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).toHaveBeenCalledTimes(1)
@@ -121,7 +109,7 @@ describe('Travis publishing script', () => {
   })
 
   it('should work correctly with TRAVIS_TAG', (done) => {
-    travisScript(getOptions(commons.editor), (error) => {
+    travisScript(getOptions(), (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).toHaveBeenCalledTimes(1)
@@ -131,7 +119,7 @@ describe('Travis publishing script', () => {
   })
 
   it('should work correctly if no space name provided', (done) => {
-    const options = getOptions(commons.editor)
+    const options = getOptions()
     delete options.spaceName
     travisScript(options, (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
@@ -143,7 +131,7 @@ describe('Travis publishing script', () => {
   })
 
   it('should handle correctly and not publish if it is the wrong branch', (done) => {
-    travisScript(getOptions(commons.editor), (error) => {
+    travisScript(getOptions(), (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).toHaveBeenCalledTimes(0)
@@ -152,7 +140,7 @@ describe('Travis publishing script', () => {
   })
 
   it('should handle correctly and not publish if it is a pull request', (done) => {
-    travisScript(getOptions(commons.editor), (error) => {
+    travisScript(getOptions(), (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).toHaveBeenCalledTimes(0)
@@ -160,15 +148,9 @@ describe('Travis publishing script', () => {
     })
   })
 
-  it('should throw an error if the editor is missing', () => {
-    expect(() => travisScript(
-      getOptions(null), jest.fn())
-    ).toThrowErrorMatchingSnapshot()
-  })
-
   it('should throw an error if the token is missing', () => {
     expect(() => travisScript(
-      getOptions(commons.editor), jest.fn())
+      getOptions(), jest.fn())
     ).toThrowErrorMatchingSnapshot()
   })
 })
