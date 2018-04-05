@@ -20,7 +20,6 @@ const commons = {
 jest.doMock('../utils/getTravisVariables', () =>
   jest.fn()
   .mockImplementationOnce(() => ({
-    TRAVIS_PULL_REQUEST: 'false',
     TRAVIS_BUILD_DIR: commons.buildDir,
     TRAVIS_TAG: null,
     TRAVIS_COMMIT: commons.commitHash,
@@ -29,7 +28,6 @@ jest.doMock('../utils/getTravisVariables', () =>
     REGISTRY_TOKEN: commons.token
   }))
   .mockImplementationOnce(() => ({
-    TRAVIS_PULL_REQUEST: 'false',
     TRAVIS_BUILD_DIR: commons.buildDir,
     TRAVIS_TAG: '2.1.8',
     TRAVIS_COMMIT: commons.commitHash,
@@ -38,7 +36,6 @@ jest.doMock('../utils/getTravisVariables', () =>
     REGISTRY_TOKEN: commons.token
   }))
   .mockImplementationOnce(() => ({
-    TRAVIS_PULL_REQUEST: 'false',
     TRAVIS_BUILD_DIR: commons.buildDir,
     TRAVIS_TAG: null,
     TRAVIS_COMMIT: commons.commitHash,
@@ -47,16 +44,6 @@ jest.doMock('../utils/getTravisVariables', () =>
     REGISTRY_TOKEN: commons.token
   }))
   .mockImplementationOnce(() => ({
-    TRAVIS_PULL_REQUEST: 'true',
-    TRAVIS_BUILD_DIR: commons.buildDir,
-    TRAVIS_TAG: null,
-    TRAVIS_COMMIT: commons.commitHash,
-    TRAVIS_REPO_SLUG: commons.slug,
-    // encrypted variables
-    REGISTRY_TOKEN: commons.token
-  }))
-  .mockImplementationOnce(() => ({
-    TRAVIS_PULL_REQUEST: 'false',
     TRAVIS_BUILD_DIR: commons.buildDir,
     TRAVIS_TAG: null,
     TRAVIS_COMMIT: commons.commitHash,
@@ -109,15 +96,6 @@ describe('Travis publishing script', () => {
       expect(error).toBeUndefined()
       expect(publishLib).toHaveBeenCalledTimes(1)
       expect(publishLib.mock.calls[0][0]).toMatchSnapshot()
-      done()
-    })
-  })
-
-  it('should handle correctly and not publish if it is a pull request', (done) => {
-    travisScript(getOptions(), (error) => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(error).toBeUndefined()
-      expect(publishLib).toHaveBeenCalledTimes(0)
       done()
     })
   })
