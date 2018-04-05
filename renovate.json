@@ -1,7 +1,9 @@
 {
   "assignees": ["CPatchane", "kosssi"],
   "labels": [],
-  "automerge": false,
+  "minor": {
+    "automerge": true
+  },
   "extends": [
     "config:js-lib"
   ],
