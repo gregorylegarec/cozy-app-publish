@@ -10,12 +10,12 @@
 
 #### Requirements
 
- - Node.js version 6 or higher;
+ - Node.js version 8 or higher;
 
 ### Install
 
 ```
-yarn add cozy-app-publish
+yarn add --dev cozy-app-publish
 ```
 
 ### Registry documentation
