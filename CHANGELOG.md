@@ -25,6 +25,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - none yet
 
 
+## [v0.3.2]
+
+### Fixed
+- Bug when using BUILD_COMMIT
+
+
 ## [v0.3.1]
 
 ### Changed
@@ -64,7 +70,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 Deploy a Cozy application to Cozy Cloud registry
 
 
-[Unreleased]: https://github.com/cozy/cozy-app-publish/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/cozy/cozy-app-publish/compare/v0.3.2...HEAD
+[v0.3.2]: https://github.com/cozy/cozy-app-publish/compare/v0.3.1...v0.3.2
 [v0.3.1]: https://github.com/cozy/cozy-app-publish/compare/v0.3.0...v0.3.1
 [v0.3.0]: https://github.com/cozy/cozy-app-publish/compare/v0.2.0...v0.3.0
 [v0.2.0]: https://github.com/cozy/cozy-app-publish/compare/v0.1.1...v0.2.0
