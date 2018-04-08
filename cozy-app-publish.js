@@ -31,6 +31,7 @@ const program = new commander.Command(pkg.name)
   .option('--space <space-name>', 'the registry space name to publish the application to (default __default__)')
   .option('--build-dir <relative-path>', 'path fo the build directory relative to the current directory (default ./build)')
   .option('--build-url <url>', 'URL of the application archive')
+  .option('--build-commit <commit-hash>', 'hash of the build commit matching the build archive to publish')
   .option('--manual-version <version>', 'publishing a specific version manually (must not be already published in the registry)')
   .option('--registry-url <url>', 'the registry URL to publish to a different one from the default URL')
   .option('--verbose', 'print additional logs')
@@ -46,6 +47,7 @@ publishApp({
   token: program.token,
   buildDir: program.buildDir,
   buildUrl: program.buildUrl,
+  buildCommit: program.buildCommit,
   manualVersion: program.manualVersion,
   registryUrl: program.registryUrl,
   space: program.space,
@@ -69,6 +71,7 @@ function publishApp (cliOptions) {
     scripts.travis({
       registryToken: cliOptions.token,
       buildDir: cliOptions.buildDir,
+      buildCommit: cliOptions.buildCommit,
       registryUrl: cliOptions.registryUrl,
       spaceName: cliOptions.space,
       verbose: cliOptions.verbose

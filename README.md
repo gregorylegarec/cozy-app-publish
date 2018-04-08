@@ -34,8 +34,10 @@ Then, just publish it using the Travis CI workflow:
 ```
 # publish it, REGISTRY_TOKEN should be
 # encrypted and provided via Travis CI environment
+# BUILD_COMMIT is your last build commit hash (git rev-parse build)
 yarn cozy-app-publish \
 --token $REGISTRY_TOKEN
+--build-commit $BUILD_COMMIT
 ```
 
 ### Manual usage (not recommended)
@@ -68,7 +70,11 @@ The path to the build folder, relative to the current directory. Since the 'stan
 
 For now, the registry a build archive (.tar.gz file) from an external link to be used in the cozy-stack. In the travis script, this url is computed using the Github trick to get archives from a commit url. For the manual script, we have to provide it.
 
-##### `--manual-version <version>` (manual usage only)
+##### `--build-commit <commit-hash>`
+
+Using the `travis` mode, the archive tarball URL is computed using github and the build commit hash. If you are not on your build branch to publish, you can specify the correct build commit hash using this parameter.
+
+##### `--manual-version <version>` (required for manual usage only)
 
 In the manual mode, we don't have a way to compute the version like in the Travis mode for example. So we have to provide it using this option.
 
