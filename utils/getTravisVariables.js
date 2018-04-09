@@ -8,9 +8,7 @@ function getTravisVariables () {
     TRAVIS_COMMIT: getEnv('TRAVIS_COMMIT'),
     TRAVIS_REPO_SLUG: getEnv('TRAVIS_REPO_SLUG'),
     // encrypted variables
-    REGISTRY_TOKEN: getEnv('REGISTRY_TOKEN'),
-    // custom
-    BUILD_COMMIT: getEnv('BUILD_COMMIT')
+    REGISTRY_TOKEN: getEnv('REGISTRY_TOKEN')
   }
 }
 
