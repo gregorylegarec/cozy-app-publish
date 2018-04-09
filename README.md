@@ -64,7 +64,7 @@ The registry editor token. This token must match the editor name and is provided
 
 ##### `--build-dir <relative-path>`
 
-The path to the build folder, relative to the current directory. Since the 'standard' Cozy application builds in the `build/` folder, `build` is the default value.
+The path to the build folder, relative to the current directory. Since the 'standard' Cozy application builds in the `build/` folder, `build` is the default value. This folder is mainly used to read the application manifest during publishing.
 
 ##### `--build-url <url>`
 
