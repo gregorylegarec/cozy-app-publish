@@ -20,7 +20,7 @@ yarn add --dev cozy-app-publish
 
 ### Registry documentation
 
-You can find more information about the registry and how to prepare an application to be published in the [official registry documentation]().
+You can find more information about the registry and how to prepare an application to be published in the [official registry documentation](https://github.com/cozy/cozy-stack/blob/master/docs/registry.md).
 
 ### Usage via Travis CI (recommended)
 
