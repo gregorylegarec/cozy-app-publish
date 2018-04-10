@@ -61,4 +61,13 @@ describe('Publish script (helper)', () => {
       done()
     })
   })
+
+  it('should handle conflict message without throwing errors', (done) => {
+    publish(getOptions(null, 'Conflict'), (resp) => {
+      // we use done callback to avoid process.exit which will kill the jest process
+      expect(resp.status).toBe(409)
+      expect(fetchFunction).toHaveBeenCalledTimes(1)
+      done()
+    })
+  })
 })
