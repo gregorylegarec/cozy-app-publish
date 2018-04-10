@@ -17,6 +17,14 @@ function fetch (url, options) {
               statusText: '(TEST) Not Found',
               json: () => Promise.resolve(({ error: 'Application slug not found' }))
             })
+          } else { // 409 Conflict
+            if (bodyObject.editor === 'makeConflictError') {
+              return resolve({
+                status: 409,
+                statusText: '(TEST) Conflict',
+                json: () => Promise.resolve(({ error: 'Version already exists' }))
+              })
+            }
           }
           expect({
             fetchURL: url,
