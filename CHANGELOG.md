@@ -25,6 +25,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - none yet
 
 
+## [v0.3.4]
+
+### Fixed
+- Don't throw an error on 409 Conflict registry response (version already exists)
+
+
 ## [v0.3.3]
 
 ### Fixed
