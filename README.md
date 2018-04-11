@@ -36,7 +36,7 @@ Then, just publish it using the Travis CI workflow:
 # encrypted and provided via Travis CI environment
 # BUILD_COMMIT is your last build commit hash (git rev-parse build)
 yarn cozy-app-publish \
---token $REGISTRY_TOKEN
+--token $REGISTRY_TOKEN \
 --build-commit $BUILD_COMMIT
 ```
 
@@ -51,7 +51,7 @@ yarn build
 Then, just publish it using:
 ```
 yarn cozy-app-publish \
---token $REGISTRY_TOKEN
+--token $REGISTRY_TOKEN \
 --build-url https://github.com/cozy/cozy-collect/archive/042cef26d9d33ea604fe4364eaab569980b500c9.tar.gz \
 --manual-version 1.0.2-dev.042cef26d9d33ea604fe4364eaab569980b500c9
 ```
