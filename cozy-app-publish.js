@@ -72,6 +72,7 @@ function publishApp (cliOptions) {
       registryToken: cliOptions.token,
       buildDir: cliOptions.buildDir,
       buildCommit: cliOptions.buildCommit,
+      buildUrl: cliOptions.buildUrl,
       registryUrl: cliOptions.registryUrl,
       spaceName: cliOptions.space,
       verbose: cliOptions.verbose
