@@ -37,6 +37,14 @@ jest.doMock('../utils/getTravisVariables', () =>
   }))
   .mockImplementationOnce(() => ({
     TRAVIS_BUILD_DIR: commons.buildDir,
+    TRAVIS_TAG: '2.1.8',
+    TRAVIS_COMMIT: commons.commitHash,
+    TRAVIS_REPO_SLUG: commons.slug,
+    // encrypted variables
+    REGISTRY_TOKEN: commons.token
+  }))
+  .mockImplementationOnce(() => ({
+    TRAVIS_BUILD_DIR: commons.buildDir,
     TRAVIS_TAG: null,
     TRAVIS_COMMIT: commons.commitHash,
     TRAVIS_REPO_SLUG: commons.slug,
@@ -55,10 +63,11 @@ jest.doMock('../utils/getTravisVariables', () =>
 
 const travisScript = require('../lib/travis')
 
-function getOptions () {
+function getOptions (buildUrl = null) {
   const options = {
     spaceName: 'mock_space',
-    travis: true
+    travis: true,
+    buildUrl
   }
   return options
 }
@@ -80,6 +89,16 @@ describe('Travis publishing script', () => {
 
   it('should work correctly with TRAVIS_TAG', (done) => {
     travisScript(getOptions(), (error) => {
+      // we use done callback to avoid process.exit which will kill the jest process
+      expect(error).toBeUndefined()
+      expect(publishLib).toHaveBeenCalledTimes(1)
+      expect(publishLib.mock.calls[0][0]).toMatchSnapshot()
+      done()
+    })
+  })
+
+  it('should work correctly if --build-url provided', (done) => {
+    travisScript(getOptions('https://mock/archive/1.0.0.tar.gz'), (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).toHaveBeenCalledTimes(1)

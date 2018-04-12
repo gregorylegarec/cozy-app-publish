@@ -68,7 +68,7 @@ The path to the build folder, relative to the current directory. Since the 'stan
 
 ##### `--build-url <url>`
 
-For now, the registry a build archive (.tar.gz file) from an external link to be used in the cozy-stack. In the travis script, this url is computed using the Github trick to get archives from a commit url. For the manual script, we have to provide it.
+For now, the registry a build archive (.tar.gz file) from an external link to be used in the cozy-stack. In the travis script, this url is computed using the Github trick to get archives from a commit url (but it's overwritten if provided by this option). For the manual script, we have to provide it.
 
 ##### `--build-commit <commit-hash>`
 
