@@ -25,6 +25,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - none yet
 
 
+## [v0.3.5]
+
+### Added
+- Enable `--build-url` option on Travis mode
+
+
 ## [v0.3.4]
 
 ### Fixed
