@@ -91,9 +91,9 @@ describe('Manual publishing script', () => {
     })
   })
 
-  it('should throw an error if the token is missing', () => {
-    expect(() => manualScript(
+  it('should throw an error if the token is missing', async () => {
+    await expect(manualScript(
       getOptions(null), jest.fn())
-    ).toThrowErrorMatchingSnapshot()
+    ).rejects.toThrowErrorMatchingSnapshot()
   })
 })
