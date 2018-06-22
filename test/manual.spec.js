@@ -4,6 +4,7 @@ const path = require('path')
 
 const manualScript = require('../lib/manual')
 const publishLib = require('../lib/publish')
+const prepublishLib = require('../lib/prepublish')
 
 const rootPath = process.cwd()
 const testFolder = '.tmp_test'
@@ -13,6 +14,8 @@ const mockAppDir = path.join(__dirname, 'mockApp')
 jest.mock('../lib/publish', () => jest.fn((options, finishCallback) => {
   finishCallback()
 }))
+
+jest.mock('../lib/prepublish', () => jest.fn(options => (Object.assign({}, options, { sha256Sum: 'fakeshasum5644545'}) )))
 
 const commons = {
   token: 'registryTokenForTest123'
@@ -91,9 +94,9 @@ describe('Manual publishing script', () => {
     })
   })
 
-  it('should throw an error if the token is missing', () => {
-    expect(() => manualScript(
+  it('should throw an error if the token is missing', async () => {
+    await expect(manualScript(
       getOptions(null), jest.fn())
-    ).toThrowErrorMatchingSnapshot()
+    ).rejects.toThrowErrorMatchingSnapshot()
   })
 })

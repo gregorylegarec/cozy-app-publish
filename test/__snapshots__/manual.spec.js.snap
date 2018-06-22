@@ -10,10 +10,12 @@ Object {
   "appSlug": "mock-app",
   "appType": "webapp",
   "appVersion": "2.1.8-dev.12345",
+  "buildCommit": undefined,
+  "prepublishHook": undefined,
   "registryEditor": "Cozy",
   "registryToken": "registryTokenForTest123",
   "registryUrl": "https://mock.registry.cc",
-  "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "sha256Sum": "fakeshasum5644545",
   "spaceName": "mock_space",
 }
 `;
@@ -24,10 +26,12 @@ Object {
   "appSlug": "mock-app",
   "appType": "webapp",
   "appVersion": "2.1.8-dev.12345",
+  "buildCommit": undefined,
+  "prepublishHook": undefined,
   "registryEditor": "Cozy",
   "registryToken": "registryTokenForTest123",
   "registryUrl": "https://mock.registry.cc",
-  "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "sha256Sum": "fakeshasum5644545",
   "spaceName": undefined,
 }
 `;
@@ -38,10 +42,12 @@ Object {
   "appSlug": "mock-app",
   "appType": "webapp",
   "appVersion": "2.1.8-dev.12345",
+  "buildCommit": undefined,
+  "prepublishHook": undefined,
   "registryEditor": "Cozy",
   "registryToken": "registryTokenForTest123",
   "registryUrl": "https://mock.registry.cc",
-  "sha256Sum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "sha256Sum": "fakeshasum5644545",
   "spaceName": "mock_space",
 }
 `;
