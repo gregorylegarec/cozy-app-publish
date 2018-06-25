@@ -2,11 +2,16 @@
 const path = require('path')
 
 const publishLib = require('../lib/publish')
+const prepublishLib = require('../lib/prepublish')
 
 const mockAppDir = path.join(__dirname, 'mockApp')
 
 jest.mock('../lib/publish', () => jest.fn((options, finishCallback) => {
   finishCallback()
+}))
+
+jest.mock('../lib/prepublish', () => jest.fn(options => {
+  return Object.assign({}, options, { sha256Sum: 'fakeshasum5644545'})
 }))
 
 const commons = {
@@ -119,9 +124,9 @@ describe('Travis publishing script', () => {
     })
   })
 
-  it('should throw an error if the token is missing', () => {
-    expect(() => travisScript(
+  it('should throw an error if the token is missing', async () => {
+    await expect(travisScript(
       getOptions(), jest.fn())
-    ).toThrowErrorMatchingSnapshot()
+    ).rejects.toThrowErrorMatchingSnapshot()
   })
 })

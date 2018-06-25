@@ -78,6 +78,39 @@ Using the `travis` mode, the archive tarball URL is computed using github and th
 
 In the manual mode, we don't have a way to compute the version like in the Travis mode for example. So we have to provide it using this option.
 
+##### `--prepublish <script_path>`
+
+Specify custom prepublish hook to manage how the app archive is generated and uploaded. The script must export a asynchronous function wich have the following signature:
+```js
+module.exports = async ({
+  appBuildUrl,
+  appSlug,
+  appType,
+  appVersion,
+  buildCommit,
+  registryUrl,
+  registryEditor,
+  registryToken,
+  spaceName
+}) => {
+ // ...
+}
+```
+
+This function must return an object containing the same options given in parameter, which can have been updated. For example, you may specifiy a new appBuildUlr in the hook. Here's a description of the different options:
+
+|Options|Description|
+|-|-|
+| `appBuildUrl` | The url where the build can be retrieved. For example, `http://github.com/cozy/cozy-foo/archives/cozy-foo.tar.gz`|
+| `appSlug` | The slug of the application, as defined in the manifest. Should not be mutated |
+| `appType` | `webapp` or `konnector` |
+| `appVersion` | App version, as defined in the manifest. Should not be mutated. |
+| `buildCommit` | sha of the commit, should not be mutated. |
+| `registryUrl` | URL of the Cozy registry, should not be mutated. |
+| `registryEditor` | Editor as it appears in the Cozy registry. |
+| `registryToken` | Registry Token. See [registry documentation](https://docs.cozy.io/en/cozy-stack/registry-publish/). Should not be mutated. |
+| `spaceName` | Space name in the Cozy registry. |
+
 ##### `--registry-url <url>`
 
 The url of the registry, by default it will be https://staging-apps-registry.cozycloud.cc.
