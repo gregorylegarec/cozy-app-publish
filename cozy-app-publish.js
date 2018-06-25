@@ -44,17 +44,22 @@ const program = new commander.Command(pkg.name)
   })
   .parse(process.argv)
 
-publishApp({
-  token: program.token,
-  buildDir: program.buildDir,
-  buildUrl: program.buildUrl,
-  buildCommit: program.buildCommit,
-  manualVersion: program.manualVersion,
-  prepublishHook: program.prepublish,
-  registryUrl: program.registryUrl,
-  space: program.space,
-  verbose: program.verbose
-})
+try {
+  publishApp({
+    token: program.token,
+    buildDir: program.buildDir,
+    buildUrl: program.buildUrl,
+    buildCommit: program.buildCommit,
+    manualVersion: program.manualVersion,
+    prepublishHook: program.prepublish,
+    registryUrl: program.registryUrl,
+    space: program.space,
+    verbose: program.verbose
+  })
+} catch (error) {
+  console.log(colorize.red(`Publishing failed: ${e.message}`))
+  process.exit(1)
+}
 
 function _getPublishMode () {
   if (process.env.TRAVIS === 'true') {
