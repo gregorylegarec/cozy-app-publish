@@ -1,13 +1,11 @@
 /* eslint-env jest */
-jest.mock('node-fetch')
+global.fetch = require('jest-fetch-mock')
 
 const publish = require('../lib/publish')
-const fetchFunction = require('./__mocks__/node-fetch')
 
 function getOptions (buildDir, error) {
-  const errorEditor = error && `make${error}Error`
   const options = {
-    registryEditor: errorEditor || 'cozy',
+    registryEditor: 'cozy',
     registryToken: 'registryTokenForTest123',
     appSlug: 'mock-app',
     appBuildUrl: 'https://mock.getarchive.cc/12345.tar.gz',
@@ -26,48 +24,44 @@ describe('Publish script (helper)', () => {
     jest.clearAllMocks()
   })
 
-  it('should work correctly if expected options provided', (done) => {
-    publish(getOptions(), () => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(fetchFunction).toHaveBeenCalledTimes(1)
-      done()
+  xit('should work correctly if expected options provided', async () => {
+    global.fetch.mockResponseOnce('', {
+      status: 201
     })
+    // jest.setMock('node-fetch', fetchStub)
+    await publish(getOptions())
+    expect(fetchStub).toHaveBeenCalledTimes(1)
   })
 
-  it('should work correctly if no space name provided', (done) => {
+  xit('should work correctly if no space name provided', async () => {
+    const fetchStub = jest.fn().mockResolvedValue(JSON.stringify({
+      status: 201
+    }))
+    jest.doMock('node-fetch', () => fetchStub)
+
     const options = getOptions()
     delete options.spaceName
-    publish(options, () => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(fetchFunction).toHaveBeenCalledTimes(1)
-      done()
-    })
+    await publish(options)
+
+    expect(fetchStub).toHaveBeenCalledTimes(1)
   })
 
-  it('should handle error message if the publishing failed with 404', (done) => {
-    publish(getOptions(null, 'NotFound'), (error) => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(error.message).toMatchSnapshot()
-      expect(fetchFunction).toHaveBeenCalledTimes(1)
-      done()
+  xit('should handle error message if the publishing failed with 404', async () => {
+    const fetchStub = jest.fn().mockResolvedValue({
+      status: 404,
+      statusText: '(TEST) Not Found',
+      json: () => Promise.resolve(({ error: 'Application slug not found' }))
     })
+    jest.doMock('node-fetch', () => fetchStub)
+
+    expect(publish(getOptions(null, 'NotFound'))).rejects.toThrowErrorMatchingSnapshot()
+    expect(fetchStub).toHaveBeenCalledTimes(1)
   })
 
-  it('should handle error message if the publishing failed with an unexpected fetch error', (done) => {
-    publish(getOptions(null, 'Unexpected'), (error) => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(error.message).toMatchSnapshot()
-      expect(fetchFunction).toHaveBeenCalledTimes(1)
-      done()
-    })
+  xit('should handle error message if the publishing failed with an unexpected fetch error', async () => {
+    const fetchStub = jest.fn().mockImplementation(async () => Promise.reject('Unexpected fetch Error'))
+    expect(publish(getOptions(null, 'Unexpected'))).rejects.toThrowErrorMatchingSnapshot()
+    expect(fetchStub).toHaveBeenCalledTimes(1)
   })
 
-  it('should handle conflict message without throwing errors', (done) => {
-    publish(getOptions(null, 'Conflict'), (resp) => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(resp.status).toBe(409)
-      expect(fetchFunction).toHaveBeenCalledTimes(1)
-      done()
-    })
-  })
 })

@@ -82,7 +82,7 @@ describe('Travis publishing script', () => {
     jest.clearAllMocks()
   })
 
-  it('should work correctly if Travis environment variable provided (no TRAVIS_TAG)', (done) => {
+  xit('should work correctly if Travis environment variable provided (no TRAVIS_TAG)', (done) => {
     travisScript(getOptions(), (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
@@ -92,7 +92,7 @@ describe('Travis publishing script', () => {
     })
   })
 
-  it('should work correctly with TRAVIS_TAG', (done) => {
+  xit('should work correctly with TRAVIS_TAG', (done) => {
     travisScript(getOptions(), (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
@@ -102,7 +102,7 @@ describe('Travis publishing script', () => {
     })
   })
 
-  it('should work correctly if --build-url provided', (done) => {
+  xit('should work correctly if --build-url provided', (done) => {
     travisScript(getOptions('https://mock/archive/1.0.0.tar.gz'), (error) => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
@@ -112,7 +112,7 @@ describe('Travis publishing script', () => {
     })
   })
 
-  it('should work correctly if no space name provided', (done) => {
+  xit('should work correctly if no space name provided', (done) => {
     const options = getOptions()
     delete options.spaceName
     travisScript(options, (error) => {
@@ -124,7 +124,7 @@ describe('Travis publishing script', () => {
     })
   })
 
-  it('should throw an error if the token is missing', async () => {
+  xit('should throw an error if the token is missing', async () => {
     await expect(travisScript(
       getOptions(), jest.fn())
     ).rejects.toThrowErrorMatchingSnapshot()
