@@ -2,23 +2,22 @@
 const path = require('path')
 
 const publishLib = require('../lib/publish')
-// const prepublishLib = require('../lib/prepublish')
+const postpublish = require('../lib/postpublish')
+const prepublish = require('../lib/prepublish')
 
-const mockAppDir = path.join(__dirname, 'mockApp')
+const mockAppDir = path.join(__dirname, 'mockApps/mockApp')
+const mockAppNoEditorDir = path.join(__dirname, 'mockApps/mockAppNoEditor')
+const getTravisVariables = require('../utils/getTravisVariables')
 
-jest.mock('../lib/publish', () =>
-  jest.fn((options, finishCallback) => {
-    finishCallback()
-  })
-)
-
+jest.mock('../lib/publish', () => jest.fn())
 jest.mock('../lib/prepublish', () =>
   jest.fn(options => {
     return Object.assign({}, options, { sha256Sum: 'fakeshasum5644545' })
   })
 )
+jest.mock('../lib/postpublish', () => jest.fn())
 
-const commons = {
+const mockCommons = {
   token: 'registryTokenForTest123',
   slug: 'mock-app',
   commitHash: 'f4a98378271c17e91faa9e70a2718c34c04cfc27',
@@ -26,49 +25,15 @@ const commons = {
 }
 
 // simulate TRAVIS CI environment variables
-jest.doMock('../utils/getTravisVariables', () =>
-  jest
-    .fn()
-    .mockImplementationOnce(() => ({
-      TRAVIS_BUILD_DIR: commons.buildDir,
-      TRAVIS_TAG: null,
-      TRAVIS_COMMIT: commons.commitHash,
-      TRAVIS_REPO_SLUG: commons.slug,
-      // encrypted variables
-      REGISTRY_TOKEN: commons.token
-    }))
-    .mockImplementationOnce(() => ({
-      TRAVIS_BUILD_DIR: commons.buildDir,
-      TRAVIS_TAG: '2.1.8',
-      TRAVIS_COMMIT: commons.commitHash,
-      TRAVIS_REPO_SLUG: commons.slug,
-      // encrypted variables
-      REGISTRY_TOKEN: commons.token
-    }))
-    .mockImplementationOnce(() => ({
-      TRAVIS_BUILD_DIR: commons.buildDir,
-      TRAVIS_TAG: '2.1.8',
-      TRAVIS_COMMIT: commons.commitHash,
-      TRAVIS_REPO_SLUG: commons.slug,
-      // encrypted variables
-      REGISTRY_TOKEN: commons.token
-    }))
-    .mockImplementationOnce(() => ({
-      TRAVIS_BUILD_DIR: commons.buildDir,
-      TRAVIS_TAG: null,
-      TRAVIS_COMMIT: commons.commitHash,
-      TRAVIS_REPO_SLUG: commons.slug,
-      // encrypted variables
-      REGISTRY_TOKEN: commons.token
-    }))
-    .mockImplementationOnce(() => ({
-      TRAVIS_BUILD_DIR: commons.buildDir,
-      TRAVIS_TAG: null,
-      TRAVIS_COMMIT: commons.commitHash,
-      TRAVIS_REPO_SLUG: commons.slug,
-      // encrypted variables
-      REGISTRY_TOKEN: ''
-    }))
+jest.mock('../utils/getTravisVariables', () =>
+  jest.fn().mockImplementation(() => ({
+    TRAVIS_BUILD_DIR: mockCommons.buildDir,
+    TRAVIS_TAG: '2.1.8',
+    TRAVIS_COMMIT: mockCommons.commitHash,
+    TRAVIS_REPO_SLUG: mockCommons.slug,
+    // encrypted variables
+    REGISTRY_TOKEN: mockCommons.token
+  }))
 )
 
 const travisScript = require('../lib/travis')
@@ -87,51 +52,85 @@ describe('Travis publishing script', () => {
     jest.clearAllMocks()
   })
 
-  xit('should work correctly if Travis environment variable provided (no TRAVIS_TAG)', done => {
-    travisScript(getOptions(), error => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(error).toBeUndefined()
-      expect(publishLib).toHaveBeenCalledTimes(1)
-      expect(publishLib.mock.calls[0][0]).toMatchSnapshot()
-      done()
-    })
+  it('should work correctly if Travis environment variable provided (no TRAVIS_TAG)', async () => {
+    getTravisVariables.mockImplementationOnce(() => ({
+      TRAVIS_BUILD_DIR: mockCommons.buildDir,
+      TRAVIS_TAG: null,
+      TRAVIS_COMMIT: mockCommons.commitHash,
+      TRAVIS_REPO_SLUG: mockCommons.slug,
+      // encrypted variables
+      REGISTRY_TOKEN: mockCommons.token
+    }))
+    await travisScript(getOptions())
+    expect(publishLib).toHaveBeenCalledTimes(1)
+    expect(publishLib.mock.calls[0][0]).toMatchSnapshot()
+    expect(prepublish).toHaveBeenCalledTimes(1)
+    expect(postpublish).toHaveBeenCalledTimes(1)
   })
 
-  xit('should work correctly with TRAVIS_TAG', done => {
-    travisScript(getOptions(), error => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(error).toBeUndefined()
-      expect(publishLib).toHaveBeenCalledTimes(1)
-      expect(publishLib.mock.calls[0][0]).toMatchSnapshot()
-      done()
-    })
+  it('should work correctly with TRAVIS_TAG', async () => {
+    await travisScript(getOptions())
+    expect(publishLib).toHaveBeenCalledTimes(1)
+    expect(publishLib.mock.calls[0][0]).toMatchSnapshot()
+    expect(prepublish).toHaveBeenCalledTimes(1)
+    expect(postpublish).toHaveBeenCalledTimes(1)
   })
 
-  xit('should work correctly if --build-url provided', done => {
-    travisScript(getOptions('https://mock/archive/1.0.0.tar.gz'), error => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(error).toBeUndefined()
-      expect(publishLib).toHaveBeenCalledTimes(1)
-      expect(publishLib.mock.calls[0][0]).toMatchSnapshot()
-      done()
-    })
+  it('should work correctly if --build-url provided', async () => {
+    await travisScript(getOptions('https://mock/archive/1.0.0.tar.gz'))
+    expect(publishLib).toHaveBeenCalledTimes(1)
+    expect(publishLib.mock.calls[0][0]).toMatchSnapshot()
+    expect(prepublish).toHaveBeenCalledTimes(1)
+    expect(postpublish).toHaveBeenCalledTimes(1)
   })
 
-  xit('should work correctly if no space name provided', done => {
+  it('should work correctly if no space name provided', async () => {
     const options = getOptions()
     delete options.spaceName
-    travisScript(options, error => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(error).toBeUndefined()
-      expect(publishLib).toHaveBeenCalledTimes(1)
-      expect(publishLib.mock.calls[0][0]).toMatchSnapshot()
-      done()
-    })
+    await travisScript(options)
+    expect(publishLib).toHaveBeenCalledTimes(1)
+    expect(publishLib.mock.calls[0][0]).toMatchSnapshot()
+    expect(prepublish).toHaveBeenCalledTimes(1)
+    expect(postpublish).toHaveBeenCalledTimes(1)
   })
 
-  xit('should throw an error if the token is missing', async () => {
+  it('should throw an error if the token is missing', async () => {
+    getTravisVariables.mockImplementationOnce(() => ({
+      TRAVIS_BUILD_DIR: mockCommons.buildDir,
+      TRAVIS_TAG: null,
+      TRAVIS_COMMIT: mockCommons.commitHash,
+      TRAVIS_REPO_SLUG: mockCommons.slug,
+      // encrypted variables
+      REGISTRY_TOKEN: ''
+    }))
     await expect(
-      travisScript(getOptions(), jest.fn())
+      travisScript(getOptions())
     ).rejects.toThrowErrorMatchingSnapshot()
+    expect(prepublish).toHaveBeenCalledTimes(0)
+    expect(postpublish).toHaveBeenCalledTimes(0)
+  })
+
+  it('should throw an error if the editor is missing', async () => {
+    getTravisVariables.mockImplementationOnce(() => ({
+      TRAVIS_BUILD_DIR: mockAppNoEditorDir,
+      TRAVIS_TAG: null,
+      TRAVIS_COMMIT: mockCommons.commitHash,
+      TRAVIS_REPO_SLUG: mockCommons.slug,
+      // encrypted variables
+      REGISTRY_TOKEN: mockCommons.token
+    }))
+    await expect(
+      travisScript(getOptions())
+    ).rejects.toThrowErrorMatchingSnapshot()
+    expect(prepublish).toHaveBeenCalledTimes(0)
+    expect(postpublish).toHaveBeenCalledTimes(0)
+  })
+
+  it('should handle correctly errored postpublish', async () => {
+    const options = getOptions()
+    postpublish.mockRejectedValueOnce(new Error('(TEST) Postpublish error'))
+    await expect(travisScript(options)).resolves
+    expect(prepublish).toHaveBeenCalledTimes(1)
+    expect(postpublish).toHaveBeenCalledTimes(1)
   })
 })

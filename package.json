@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "eslint '{lib, utils,test}/**/*.js'",
     "pretest": "yarn lint",
-    "test": "jest --verbose",
+    "test": "jest --verbose --coverage",
     "test:manual": "jest test/manual.spec.js",
     "test:publish": "jest test/publish.spec.js",
     "test:travis": "jest test/travis.spec.js"

@@ -1,7 +1,7 @@
 const requireHook = (hook, type) => {
   try {
     return require(`../lib/hooks/${type}/` + hook + '.js')
-  } catch(error) {
+  } catch (error) {
     // Not builtin
     return require(process.cwd() + '/' + hook)
   }
@@ -17,8 +17,7 @@ module.exports = async (hookNames, type, options) => {
       try {
         const hookScript = requireHook(hook, type)
         console.log(`↳ ℹ️  Running ${type}publish hook ${hook}`)
-        hookOptions =
-          (await hookScript(hookOptions)) || hookOptions
+        hookOptions = (await hookScript(hookOptions)) || hookOptions
       } catch (error) {
         console.error(
           `↳ ❌  An error occured with ${type}publish hook ${hook}: ${

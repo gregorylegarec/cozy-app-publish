@@ -1,8 +1,6 @@
 /* eslint-env jest */
 const postpublishLib = require('../lib/postpublish')
 
-// const mattermostScript = require('../lib/hooks/post/mattermost')
-
 const mattermostSpy = jest.fn()
 jest.doMock('../lib/hooks/post/mattermost', () => mattermostSpy)
 
@@ -30,17 +28,18 @@ describe('Postpublish script', () => {
   // This test is a real test which run a rundeck job, so we do not run it
   // at every build
   // It needs the RUNDECK_TOKEN to be specified
-  xit('runs rundeck hook', async () => {
-    process.env.RUNDECK_TOKEN = 'your token here'
-    process.env.TARGETS_BETA = 'recette.cozy.works, gregory.cozy.works'
-    const options = {
-      ...optionsMock,
-      appSlug: 'cozy-settings',
-      appVersion: '2.1.0-beta.1',
-      postpublishHook: 'rundeck'
-    }
-    await expect(postpublishLib(options)).resolves.toMatchObject(options)
-    delete process.env.RUNDECK_TOKEN
-    delete process.env.TARGETS_BETA
-  })
+
+  // it('runs rundeck hook', async () => {
+  //   process.env.RUNDECK_TOKEN = 'your token here'
+  //   process.env.TARGETS_BETA = 'recette.cozy.works, gregory.cozy.works'
+  //   const options = {
+  //     ...optionsMock,
+  //     appSlug: 'cozy-settings',
+  //     appVersion: '2.1.0-beta.1',
+  //     postpublishHook: 'rundeck'
+  //   }
+  //   await expect(postpublishLib(options)).resolves.toMatchObject(options)
+  //   delete process.env.RUNDECK_TOKEN
+  //   delete process.env.TARGETS_BETA
+  // })
 })
