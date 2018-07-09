@@ -30,6 +30,12 @@
     "lib"
   ],
   "devDependencies": {
-    "jest": "23.2.0"
+    "jest": "23.2.0",
+    "jest-fetch-mock": "^1.6.5"
+  },
+  "jest": {
+    "setupFiles": [
+      "./test/jestLibs/setupJest.js"
+    ]
   }
 }
