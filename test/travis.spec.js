@@ -2,17 +2,21 @@
 const path = require('path')
 
 const publishLib = require('../lib/publish')
-const prepublishLib = require('../lib/prepublish')
+// const prepublishLib = require('../lib/prepublish')
 
 const mockAppDir = path.join(__dirname, 'mockApp')
 
-jest.mock('../lib/publish', () => jest.fn((options, finishCallback) => {
-  finishCallback()
-}))
+jest.mock('../lib/publish', () =>
+  jest.fn((options, finishCallback) => {
+    finishCallback()
+  })
+)
 
-jest.mock('../lib/prepublish', () => jest.fn(options => {
-  return Object.assign({}, options, { sha256Sum: 'fakeshasum5644545'})
-}))
+jest.mock('../lib/prepublish', () =>
+  jest.fn(options => {
+    return Object.assign({}, options, { sha256Sum: 'fakeshasum5644545' })
+  })
+)
 
 const commons = {
   token: 'registryTokenForTest123',
@@ -23,52 +27,53 @@ const commons = {
 
 // simulate TRAVIS CI environment variables
 jest.doMock('../utils/getTravisVariables', () =>
-  jest.fn()
-  .mockImplementationOnce(() => ({
-    TRAVIS_BUILD_DIR: commons.buildDir,
-    TRAVIS_TAG: null,
-    TRAVIS_COMMIT: commons.commitHash,
-    TRAVIS_REPO_SLUG: commons.slug,
-    // encrypted variables
-    REGISTRY_TOKEN: commons.token
-  }))
-  .mockImplementationOnce(() => ({
-    TRAVIS_BUILD_DIR: commons.buildDir,
-    TRAVIS_TAG: '2.1.8',
-    TRAVIS_COMMIT: commons.commitHash,
-    TRAVIS_REPO_SLUG: commons.slug,
-    // encrypted variables
-    REGISTRY_TOKEN: commons.token
-  }))
-  .mockImplementationOnce(() => ({
-    TRAVIS_BUILD_DIR: commons.buildDir,
-    TRAVIS_TAG: '2.1.8',
-    TRAVIS_COMMIT: commons.commitHash,
-    TRAVIS_REPO_SLUG: commons.slug,
-    // encrypted variables
-    REGISTRY_TOKEN: commons.token
-  }))
-  .mockImplementationOnce(() => ({
-    TRAVIS_BUILD_DIR: commons.buildDir,
-    TRAVIS_TAG: null,
-    TRAVIS_COMMIT: commons.commitHash,
-    TRAVIS_REPO_SLUG: commons.slug,
-    // encrypted variables
-    REGISTRY_TOKEN: commons.token
-  }))
-  .mockImplementationOnce(() => ({
-    TRAVIS_BUILD_DIR: commons.buildDir,
-    TRAVIS_TAG: null,
-    TRAVIS_COMMIT: commons.commitHash,
-    TRAVIS_REPO_SLUG: commons.slug,
-    // encrypted variables
-    REGISTRY_TOKEN: ''
-  }))
+  jest
+    .fn()
+    .mockImplementationOnce(() => ({
+      TRAVIS_BUILD_DIR: commons.buildDir,
+      TRAVIS_TAG: null,
+      TRAVIS_COMMIT: commons.commitHash,
+      TRAVIS_REPO_SLUG: commons.slug,
+      // encrypted variables
+      REGISTRY_TOKEN: commons.token
+    }))
+    .mockImplementationOnce(() => ({
+      TRAVIS_BUILD_DIR: commons.buildDir,
+      TRAVIS_TAG: '2.1.8',
+      TRAVIS_COMMIT: commons.commitHash,
+      TRAVIS_REPO_SLUG: commons.slug,
+      // encrypted variables
+      REGISTRY_TOKEN: commons.token
+    }))
+    .mockImplementationOnce(() => ({
+      TRAVIS_BUILD_DIR: commons.buildDir,
+      TRAVIS_TAG: '2.1.8',
+      TRAVIS_COMMIT: commons.commitHash,
+      TRAVIS_REPO_SLUG: commons.slug,
+      // encrypted variables
+      REGISTRY_TOKEN: commons.token
+    }))
+    .mockImplementationOnce(() => ({
+      TRAVIS_BUILD_DIR: commons.buildDir,
+      TRAVIS_TAG: null,
+      TRAVIS_COMMIT: commons.commitHash,
+      TRAVIS_REPO_SLUG: commons.slug,
+      // encrypted variables
+      REGISTRY_TOKEN: commons.token
+    }))
+    .mockImplementationOnce(() => ({
+      TRAVIS_BUILD_DIR: commons.buildDir,
+      TRAVIS_TAG: null,
+      TRAVIS_COMMIT: commons.commitHash,
+      TRAVIS_REPO_SLUG: commons.slug,
+      // encrypted variables
+      REGISTRY_TOKEN: ''
+    }))
 )
 
 const travisScript = require('../lib/travis')
 
-function getOptions (buildUrl = null) {
+function getOptions(buildUrl = null) {
   const options = {
     spaceName: 'mock_space',
     travis: true,
@@ -82,8 +87,8 @@ describe('Travis publishing script', () => {
     jest.clearAllMocks()
   })
 
-  xit('should work correctly if Travis environment variable provided (no TRAVIS_TAG)', (done) => {
-    travisScript(getOptions(), (error) => {
+  xit('should work correctly if Travis environment variable provided (no TRAVIS_TAG)', done => {
+    travisScript(getOptions(), error => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).toHaveBeenCalledTimes(1)
@@ -92,8 +97,8 @@ describe('Travis publishing script', () => {
     })
   })
 
-  xit('should work correctly with TRAVIS_TAG', (done) => {
-    travisScript(getOptions(), (error) => {
+  xit('should work correctly with TRAVIS_TAG', done => {
+    travisScript(getOptions(), error => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).toHaveBeenCalledTimes(1)
@@ -102,8 +107,8 @@ describe('Travis publishing script', () => {
     })
   })
 
-  xit('should work correctly if --build-url provided', (done) => {
-    travisScript(getOptions('https://mock/archive/1.0.0.tar.gz'), (error) => {
+  xit('should work correctly if --build-url provided', done => {
+    travisScript(getOptions('https://mock/archive/1.0.0.tar.gz'), error => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).toHaveBeenCalledTimes(1)
@@ -112,10 +117,10 @@ describe('Travis publishing script', () => {
     })
   })
 
-  xit('should work correctly if no space name provided', (done) => {
+  xit('should work correctly if no space name provided', done => {
     const options = getOptions()
     delete options.spaceName
-    travisScript(options, (error) => {
+    travisScript(options, error => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).toHaveBeenCalledTimes(1)
@@ -125,8 +130,8 @@ describe('Travis publishing script', () => {
   })
 
   xit('should throw an error if the token is missing', async () => {
-    await expect(travisScript(
-      getOptions(), jest.fn())
+    await expect(
+      travisScript(getOptions(), jest.fn())
     ).rejects.toThrowErrorMatchingSnapshot()
   })
 })

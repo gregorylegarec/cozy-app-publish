@@ -52,10 +52,13 @@ describe('Publish script (helper)', () => {
   })
 
   it('should handle error message if the publishing failed with 404', async () => {
-    fetch.mockResponseOnce(JSON.stringify({ error: 'Application slug not found' }), {
-      status: 404,
-      statusText: '(TEST) Not Found'
-    })
+    fetch.mockResponseOnce(
+      JSON.stringify({ error: 'Application slug not found' }),
+      {
+        status: 404,
+        statusText: '(TEST) Not Found'
+      }
+    )
 
     expect(publish(getOptions())).rejects.toThrowErrorMatchingSnapshot()
     expect(fetch).toHaveBeenCalledTimes(1)
@@ -63,9 +66,7 @@ describe('Publish script (helper)', () => {
 
   it('should handle error message if the publishing failed with an unexpected fetch error', async () => {
     fetch.mockRejectOnce(new Error('(TEST) Unexpected error'))
-    expect(
-      publish(getOptions())
-    ).rejects.toThrowErrorMatchingSnapshot()
+    expect(publish(getOptions())).rejects.toThrowErrorMatchingSnapshot()
     expect(fetch).toHaveBeenCalledTimes(1)
   })
 })

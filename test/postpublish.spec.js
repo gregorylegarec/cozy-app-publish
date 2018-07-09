@@ -1,7 +1,7 @@
 /* eslint-env jest */
 const postpublishLib = require('../lib/postpublish')
 
-const mattermostScript = require('../lib/hooks/post/mattermost')
+// const mattermostScript = require('../lib/hooks/post/mattermost')
 
 const mattermostSpy = jest.fn()
 jest.doMock('../lib/hooks/post/mattermost', () => mattermostSpy)
@@ -18,7 +18,7 @@ describe('Postpublish script', () => {
     appVersion: '0.0.0-test',
     registryUrl: 'http://registry.mock/',
     registryEditor: 'Cozy',
-    registryToken: 'a5464f54e654c6546b54a56a',
+    registryToken: 'a5464f54e654c6546b54a56a'
   }
 
   it('runs without errors with built-in hook', async () => {
@@ -31,11 +31,11 @@ describe('Postpublish script', () => {
   // at every build
   // It needs the RUNDECK_TOKEN to be specified
   xit('runs rundeck hook', async () => {
-    process.env.RUNDECK_TOKEN='your token here'
-    process.env.TARGETS_BETA='recette.cozy.works, gregory.cozy.works'
+    process.env.RUNDECK_TOKEN = 'your token here'
+    process.env.TARGETS_BETA = 'recette.cozy.works, gregory.cozy.works'
     const options = {
       ...optionsMock,
-      appSlug:'cozy-settings',
+      appSlug: 'cozy-settings',
       appVersion: '2.1.0-beta.1',
       postpublishHook: 'rundeck'
     }

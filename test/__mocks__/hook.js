@@ -1,3 +1,3 @@
 module.exports = options => {
-  return Object.assign({}, options, { appBuildUrl: 'http://cozy.io'})
+  return Object.assign({}, options, { appBuildUrl: 'http://cozy.io' })
 }

@@ -1,4 +1,4 @@
 /* eslint-env jest */
 
 const fetch = require('jest-fetch-mock')
-jest.doMock('node-fetch', (url, options) => fetch.mockResponse({ status: 201 }))
+jest.doMock('node-fetch', () => fetch.mockResponse({ status: 201 }))

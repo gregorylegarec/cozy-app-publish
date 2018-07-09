@@ -4,7 +4,7 @@ const path = require('path')
 
 const manualScript = require('../lib/manual')
 const publishLib = require('../lib/publish')
-const prepublishLib = require('../lib/prepublish')
+// const prepublishLib = require('../lib/prepublish')
 
 const rootPath = process.cwd()
 const testFolder = '.tmp_test'
@@ -12,13 +12,17 @@ const testPath = path.join(rootPath, testFolder)
 const mockAppDir = path.join(__dirname, 'mockApp')
 
 jest.mock('../lib/publish', () => jest.fn())
-jest.mock('../lib/prepublish', () => jest.fn(options => (Object.assign({}, options, { sha256Sum: 'fakeshasum5644545'}) )))
+jest.mock('../lib/prepublish', () =>
+  jest.fn(options =>
+    Object.assign({}, options, { sha256Sum: 'fakeshasum5644545' })
+  )
+)
 
 const commons = {
   token: 'registryTokenForTest123'
 }
 
-function getOptions (token, buildDir) {
+function getOptions(token, buildDir) {
   const options = {
     registryToken: token,
     appBuildUrl: 'https://mock.getarchive.cc/12345.tar.gz',
@@ -51,17 +55,21 @@ describe('Manual publishing script', () => {
   })
 
   xit('should work correctly if expected options provided', async done => {
-    manualScript(getOptions(commons.token, './build'), { confirm: 'yes' }, (error) => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(error).toBeUndefined()
-      expect(publishLib).resolves.resolves.toHaveBeenCalledTimes(1)
-      expect(publishLib.mock.calls[0][0]).toMatchSnapshot()
-      done()
-    })
+    manualScript(
+      getOptions(commons.token, './build'),
+      { confirm: 'yes' },
+      error => {
+        // we use done callback to avoid process.exit which will kill the jest process
+        expect(error).toBeUndefined()
+        expect(publishLib).resolves.resolves.toHaveBeenCalledTimes(1)
+        expect(publishLib.mock.calls[0][0]).toMatchSnapshot()
+        done()
+      }
+    )
   })
 
-  xit('should work correctly with default buildDir value "build"', (done) => {
-    manualScript(getOptions(commons.token), { confirm: 'yes' }, (error) => {
+  xit('should work correctly with default buildDir value "build"', done => {
+    manualScript(getOptions(commons.token), { confirm: 'yes' }, error => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).resolves.toHaveBeenCalledTimes(1)
@@ -70,10 +78,10 @@ describe('Manual publishing script', () => {
     })
   })
 
-  xit('should work correctly if no space name provided', (done) => {
+  xit('should work correctly if no space name provided', done => {
     const options = getOptions(commons.token)
     delete options.spaceName
-    manualScript(options, { confirm: 'yes' }, (error) => {
+    manualScript(options, { confirm: 'yes' }, error => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error).toBeUndefined()
       expect(publishLib).resolves.toHaveBeenCalledTimes(1)
@@ -82,8 +90,8 @@ describe('Manual publishing script', () => {
     })
   })
 
-  xit('should handle error message if the publishing is canceled by the user via the prompt', (done) => {
-    manualScript(getOptions(commons.token), { confirm: 'no' }, (error) => {
+  xit('should handle error message if the publishing is canceled by the user via the prompt', done => {
+    manualScript(getOptions(commons.token), { confirm: 'no' }, error => {
       // we use done callback to avoid process.exit which will kill the jest process
       expect(error.message).toMatchSnapshot()
       expect(publishLib).resolves.toHaveBeenCalledTimes(0)
@@ -92,8 +100,8 @@ describe('Manual publishing script', () => {
   })
 
   it('should throw an error if the token is missing', async () => {
-    await expect(manualScript(
-      getOptions(null), jest.fn())
+    await expect(
+      manualScript(getOptions(null), jest.fn())
     ).rejects.toThrowErrorMatchingSnapshot()
   })
 })

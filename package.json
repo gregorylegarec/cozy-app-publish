@@ -5,6 +5,8 @@
   "author": "Cozy",
   "license": "MIT",
   "scripts": {
+    "lint": "eslint '{lib, utils,test}/**/*.js'",
+    "pretest": "yarn lint",
     "test": "jest --verbose",
     "test:manual": "jest test/manual.spec.js",
     "test:publish": "jest test/publish.spec.js",
@@ -30,6 +32,7 @@
     "lib"
   ],
   "devDependencies": {
+    "eslint-config-cozy-app": "^0.10.0",
     "jest": "23.2.0",
     "jest-fetch-mock": "^1.6.5"
   },
