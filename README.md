@@ -121,7 +121,7 @@ Works exactly like the `prepublish` option, but will be executed after the publi
 You can specify more than one hook by separating them with a `,`:
 
 ```
-cozy-app-publish --prepublish <hook_name>, <other_hook_name>
+cozy-app-publish --prepublish <hook_name>,<other_hook_name>
 ```
 
 Some hooks are shipped with cozy-app-publish and can be used by specifying their name:
@@ -151,7 +151,7 @@ Deploys the app on rundeck. This hook requires several variables to be set as en
 - `TARGETS_BETA`: a comma-separated list of instances to deploy the app on, on the `beta` channel.
 - `TARGETS_STABLE`: a comma-separated list of instances to deploy the app on, on the `stable` channel.
 
-##### Mattrmost postpublish hook
+##### Mattermost postpublish hook
 
 ```
 cozy-app-publish --prepublish rundeck
@@ -173,3 +173,19 @@ Use this options to provide a specific space name of the registry to publish the
 #### `--verbose`
 
 To print more logs when using tool (useful for debug).
+
+### Recommended workflow
+
+#### Day to day
+
+- Development is done on feature branches that are merged into `master`,  once they are complete.
+- Every time someone commits on `master`, a new archive is created and uploaded on Downcloud and it is then deployed on a test instance with Rundeck.
+
+#### Release workflow
+
+- A new branch is created from the current state of `master`. Let's say we want to deploy version `1.0.0` of the app.
+- The only type of commits allowed on this release branch are bug fixes.
+- Every time one or more bugs are fixed and the version is considered for release, the latest commit is tagged with a prerelease version number, eg. `1.0.0-beta.1`, `1.0.0-beta.2`, etc…
+- Each of these prereleases is automatically uploaded on downcloud and deployed on instances that are on the `beta` channel.
+- Once the branch is deemed ready for release, the last commit is tagged with the final version — `1.0.0` in our example. It is then, again, uploaded on downcloud, published on the registry and deployed on specific instances as needed.
+- The release branch is merged back into `master` so that all the bugfixes aren't lost.
