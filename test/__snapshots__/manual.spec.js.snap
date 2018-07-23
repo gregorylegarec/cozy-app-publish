@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Manual publishing script should handle error message if the publishing is canceled by the user via the prompt 1`] = `"Publishing manually canceled."`;
-
 exports[`Manual publishing script should throw an error if the token is missing 1`] = `"Registry token is missing. Publishing failed."`;
 
 exports[`Manual publishing script should work correctly if expected options provided 1`] = `

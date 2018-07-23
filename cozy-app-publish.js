@@ -57,7 +57,7 @@ try {
     verbose: program.verbose
   })
 } catch (error) {
-  console.log(colorize.red(`Publishing failed: ${e.message}`))
+  console.log(colorize.red(`Publishing failed: ${error.message}`))
   process.exit(1)
 }
 

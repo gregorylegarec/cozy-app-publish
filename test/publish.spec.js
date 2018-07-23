@@ -1,13 +1,11 @@
 /* eslint-env jest */
-jest.mock('node-fetch')
+const fetch = require('jest-fetch-mock')
 
 const publish = require('../lib/publish')
-const fetchFunction = require('./__mocks__/node-fetch')
 
-function getOptions (buildDir, error) {
-  const errorEditor = error && `make${error}Error`
+function getOptions() {
   const options = {
-    registryEditor: errorEditor || 'cozy',
+    registryEditor: 'cozy',
     registryToken: 'registryTokenForTest123',
     appSlug: 'mock-app',
     appBuildUrl: 'https://mock.getarchive.cc/12345.tar.gz',
@@ -15,10 +13,17 @@ function getOptions (buildDir, error) {
     registryUrl: 'https://mock.registry.cc',
     spaceName: 'mock_space',
     appType: 'webapp',
-    sha256Sum: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+    sha256Sum:
+      'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
   }
-  if (buildDir) options.buildDir = buildDir
   return options
+}
+
+function getObjectToSnapshot(fetchMock, callNumber = 0) {
+  return {
+    fetchURL: fetchMock.mock.calls[callNumber][0],
+    options: fetchMock.mock.calls[callNumber][1]
+  }
 }
 
 describe('Publish script (helper)', () => {
@@ -26,48 +31,42 @@ describe('Publish script (helper)', () => {
     jest.clearAllMocks()
   })
 
-  it('should work correctly if expected options provided', (done) => {
-    publish(getOptions(), () => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(fetchFunction).toHaveBeenCalledTimes(1)
-      done()
+  it('should work correctly if expected options provided', async () => {
+    fetch.mockResponseOnce('', {
+      status: 201
     })
+    await publish(getOptions())
+    expect(fetch).toHaveBeenCalledTimes(1)
+    expect(getObjectToSnapshot(fetch)).toMatchSnapshot()
   })
 
-  it('should work correctly if no space name provided', (done) => {
+  it('should work correctly if no space name provided', async () => {
+    fetch.mockResponseOnce('', {
+      status: 201
+    })
     const options = getOptions()
     delete options.spaceName
-    publish(options, () => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(fetchFunction).toHaveBeenCalledTimes(1)
-      done()
-    })
+    await publish(options)
+    expect(fetch).toHaveBeenCalledTimes(1)
+    expect(getObjectToSnapshot(fetch)).toMatchSnapshot()
   })
 
-  it('should handle error message if the publishing failed with 404', (done) => {
-    publish(getOptions(null, 'NotFound'), (error) => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(error.message).toMatchSnapshot()
-      expect(fetchFunction).toHaveBeenCalledTimes(1)
-      done()
-    })
+  it('should handle error message if the publishing failed with 404', async () => {
+    fetch.mockResponseOnce(
+      JSON.stringify({ error: 'Application slug not found' }),
+      {
+        status: 404,
+        statusText: '(TEST) Not Found'
+      }
+    )
+
+    expect(publish(getOptions())).rejects.toThrowErrorMatchingSnapshot()
+    expect(fetch).toHaveBeenCalledTimes(1)
   })
 
-  it('should handle error message if the publishing failed with an unexpected fetch error', (done) => {
-    publish(getOptions(null, 'Unexpected'), (error) => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(error.message).toMatchSnapshot()
-      expect(fetchFunction).toHaveBeenCalledTimes(1)
-      done()
-    })
-  })
-
-  it('should handle conflict message without throwing errors', (done) => {
-    publish(getOptions(null, 'Conflict'), (resp) => {
-      // we use done callback to avoid process.exit which will kill the jest process
-      expect(resp.status).toBe(409)
-      expect(fetchFunction).toHaveBeenCalledTimes(1)
-      done()
-    })
+  it('should handle error message if the publishing failed with an unexpected fetch error', async () => {
+    fetch.mockRejectOnce(new Error('(TEST) Unexpected error'))
+    expect(publish(getOptions())).rejects.toThrowErrorMatchingSnapshot()
+    expect(fetch).toHaveBeenCalledTimes(1)
   })
 })

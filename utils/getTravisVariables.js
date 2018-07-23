@@ -1,6 +1,6 @@
-function getTravisVariables () {
+function getTravisVariables() {
   // values from process.env are always string
-  const getEnv = (name) => process.env[name]
+  const getEnv = name => process.env[name]
 
   return {
     TRAVIS_BUILD_DIR: getEnv('TRAVIS_BUILD_DIR'),

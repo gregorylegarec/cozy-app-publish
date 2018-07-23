@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Travis publishing script should throw an error if the editor is missing 1`] = `"Registry editor is missing in the manifest. Publishing failed."`;
+
 exports[`Travis publishing script should throw an error if the token is missing 1`] = `"Registry token is missing. Publishing failed."`;
 
 exports[`Travis publishing script should work correctly if --build-url provided 1`] = `
@@ -34,10 +36,10 @@ Object {
 
 exports[`Travis publishing script should work correctly if no space name provided 1`] = `
 Object {
-  "appBuildUrl": "https://github.com/mock-app/archive/f4a98378271c17e91faa9e70a2718c34c04cfc27.tar.gz",
+  "appBuildUrl": "https://github.com/mock-app/archive/2.1.8.tar.gz",
   "appSlug": "mock-app",
   "appType": "webapp",
-  "appVersion": "2.1.8-dev.f4a98378271c17e91faa9e70a2718c34c04cfc27",
+  "appVersion": "2.1.8",
   "prepublishHook": undefined,
   "registryEditor": "Cozy",
   "registryToken": "registryTokenForTest123",

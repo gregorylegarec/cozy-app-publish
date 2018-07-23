@@ -1,3 +1,7 @@
 module.exports = options => {
-  return Object.assign({}, options, { shouldnotbehere: 'no', nothingtodohere: true, cpatchane: 'nice' })
+  return Object.assign({}, options, {
+    shouldnotbehere: 'no',
+    nothingtodohere: true,
+    cpatchane: 'nice'
+  })
 }
