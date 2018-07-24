@@ -80,7 +80,7 @@ In the manual mode, we don't have a way to compute the version like in the Travi
 
 #### `--prepublish <script_path>`
 
-Specify custom prepublish hook to manage how the app archive is generated and uploaded. The script must export a asynchronous function wich has the following signature:
+Specify custom prepublish hook to manage how the app archive is generated and uploaded. The script must export a asynchronous function which has the following signature:
 ```js
 module.exports = async ({
   appBuildUrl,
@@ -141,7 +141,7 @@ This hook allows to upload the app to our downcloud server and sets the `appBuil
 ##### Rundeck postpublish hook
 
 ```
-cozy-app-publish --prepublish rundeck
+cozy-app-publish --postpublish rundeck
 ```
 
 Deploys the app on rundeck. This hook requires several variables to be set as environment variables:
@@ -154,7 +154,7 @@ Deploys the app on rundeck. This hook requires several variables to be set as en
 ##### Mattermost postpublish hook
 
 ```
-cozy-app-publish --prepublish rundeck
+cozy-app-publish --postpublish mattermost
 ```
 
 Sends a message to a mattermost channel to notify of the app's deployment. Requires the following options:
