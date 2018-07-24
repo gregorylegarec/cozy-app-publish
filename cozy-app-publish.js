@@ -34,6 +34,7 @@ const program = new commander.Command(pkg.name)
   .option('--build-commit <commit-hash>', 'hash of the build commit matching the build archive to publish')
   .option('--manual-version <version>', 'publishing a specific version manually (must not be already published in the registry)')
   .option('--prepublish <script-path>', 'Hook to process parameters just before publishing, typically to upload archive on custom host')
+  .option('--postpublish <script-path>', 'Hook to process parameters just after publishing, typically to deploy app')
   .option('--registry-url <url>', 'the registry URL to publish to a different one from the default URL')
   .option('--verbose', 'print additional logs')
   .on('--help', () => {
@@ -52,6 +53,7 @@ try {
     buildCommit: program.buildCommit,
     manualVersion: program.manualVersion,
     prepublishHook: program.prepublish,
+    postpublishHook: program.postpublish,
     registryUrl: program.registryUrl,
     space: program.space,
     verbose: program.verbose
@@ -81,6 +83,7 @@ function publishApp (cliOptions) {
       buildCommit: cliOptions.buildCommit,
       buildUrl: cliOptions.buildUrl,
       prepublishHook: cliOptions.prepublishHook,
+      postpublishHook: cliOptions.postpublishHook,
       registryUrl: cliOptions.registryUrl,
       spaceName: cliOptions.space,
       verbose: cliOptions.verbose
@@ -95,6 +98,7 @@ function publishApp (cliOptions) {
       appBuildUrl: cliOptions.buildUrl,
       manualVersion: cliOptions.manualVersion,
       prepublishHook: cliOptions.prepublishHook,
+      postpublishHook: cliOptions.postpublishHook,
       registryUrl: cliOptions.registryUrl,
       spaceName: cliOptions.space,
       verbose: cliOptions.verbose
