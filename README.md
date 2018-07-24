@@ -138,6 +138,26 @@ cozy-app-publish --prepublish downcloud
 
 This hook allows to upload the app to our downcloud server and sets the `appBuildUrl` accordingly.
 
+In order to upload files to our downcloud server, you will need to generate a new pair of RSA keys, add the private key to your ssh-agent and make sure the corresponding public key is present on the downcloud server. Here's how to do it:
+
+- Generate a new key pair with `ssh-keygen -t rsa -b 4096 -f id_rsa_downcloud_myapp -C downcloud_myapp_deploy`.
+- Communicate the public key to someone who can deposit it on the downcloud server.
+- If you're running things locally, you'll want to run `ssh-add id_rsa_downcloud_myapp` to add it to your ssh-agent.
+- If you're planing to run this `cozy-app-publish` on Travis, you'll want to [encrypt that file first](https://docs.travis-ci.com/user/encrypting-files/#Automated-Encryption). Run `travis encrypt-file id_rsa_downcloud_myapp` and copy the output.
+- To add the key to Travis's ssh-agent, add the following lines in the `before_install` section of your `.travis.yml`, but don't forget to paste the output of `travis encrypt-file` where it's needed.
+
+```
+- if [ "$TRAVIS_SECURE_ENV_VARS" != "false" ]; then PASTE_TRAVIS_ENCRYPT_OUTPUT_HERE; fi
+- if [ "$TRAVIS_SECURE_ENV_VARS" != "false" ]; then eval "$(ssh-agent -s)"; fi
+- if [ "$TRAVIS_SECURE_ENV_VARS" != "false" ]; then chmod 600 id_rsa_downcloud_myapp;
+  fi
+- if [ "$TRAVIS_SECURE_ENV_VARS" != "false" ]; then ssh-add id_rsa_downcloud_myapp;
+  fi
+```
+
+- We recommend changing the path used for the private key. You can change the `-out` argument of the command output by `travis encrypt-file` and the corresponding path's in the commands above. `/tmp/id_rsa_downcloud_myapp` is a good place to store this key.
+- Finally, **secure the private key**. If you're using Travis, the key is now stored by Travis so you should delete your local copy. If you're running things on your machine, make sure the private key doesn't end up in version control.
+
 ##### Rundeck postpublish hook
 
 ```
@@ -146,7 +166,7 @@ cozy-app-publish --postpublish rundeck
 
 Deploys the app on rundeck. This hook requires several variables to be set as environment variables:
 
-- `RUNDECK_TOKEN`:  the token to use to interact with the Rundeck API
+- `RUNDECK_TOKEN`:  the token to use to interact with the Rundeck API. To obtain such a token, ask someone that has admin privileges on the rundeck server.
 - `TARGETS_DEV`: a comma-separated list of instances to deploy the app on, on the `dev` channel.
 - `TARGETS_BETA`: a comma-separated list of instances to deploy the app on, on the `beta` channel.
 - `TARGETS_STABLE`: a comma-separated list of instances to deploy the app on, on the `stable` channel.
@@ -159,8 +179,8 @@ cozy-app-publish --postpublish mattermost
 
 Sends a message to a mattermost channel to notify of the app's deployment. Requires the following options:
 
-- `MATTERMOST_HOOK_URL`
-- `MATTERMOST_CHANNEL`
+- `MATTERMOST_HOOK_URL`: You will need to set up a new [Incoming Hook](https://docs.mattermost.com/developer/webhooks-incoming.html).
+- `MATTERMOST_CHANNEL`: The name of the channel messages will be posted to.
 
 #### `--registry-url <url>`
 
