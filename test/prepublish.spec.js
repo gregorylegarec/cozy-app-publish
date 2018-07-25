@@ -1,6 +1,9 @@
 /* eslint-env jest */
 const prepublishLib = require('../lib/prepublish')
 
+const downcloudSpy = jest.fn()
+jest.doMock('../lib/hooks/pre/downcloud', () => downcloudSpy)
+
 describe('Prepublish script', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -34,5 +37,11 @@ describe('Prepublish script', () => {
       prepublishHook: './test/__mocks__/prepublish-missing-options-hook'
     }
     await expect(prepublishLib(options)).rejects.toThrowErrorMatchingSnapshot()
+  })
+
+  it('runs without errors with built-in hook', async () => {
+    const options = { ...optionsMock, prepublishHook: 'downcloud' }
+    await expect(prepublishLib(options)).resolves.toMatchSnapshot()
+    expect(downcloudSpy).toHaveBeenCalled()
   })
 })
