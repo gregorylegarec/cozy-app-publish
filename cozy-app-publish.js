@@ -18,7 +18,8 @@ var semver = currentNodeVersion.split('.')
 var major = semver[0]
 
 if (major < 6) {
-  console.error(colorize.red(`You are running Node v${currentNodeVersion}.
+  console.error(
+    colorize.red(`You are running Node v${currentNodeVersion}.
     cozy-app-publish requires Node v6 minimum, please update you version of Node.`)
   )
   process.exit(1)
@@ -27,21 +28,47 @@ if (major < 6) {
 const program = new commander.Command(pkg.name)
   .version(pkg.version)
   .usage(`[options]`)
-  .option('--token <editor-token>', 'the registry token matching the provided editor (required)')
-  .option('--space <space-name>', 'the registry space name to publish the application to (default __default__)')
-  .option('--build-dir <relative-path>', 'path fo the build directory relative to the current directory (default ./build)')
+  .option(
+    '--token <editor-token>',
+    'the registry token matching the provided editor (required)'
+  )
+  .option(
+    '--space <space-name>',
+    'the registry space name to publish the application to (default __default__)'
+  )
+  .option(
+    '--build-dir <relative-path>',
+    'path fo the build directory relative to the current directory (default ./build)'
+  )
   .option('--build-url <url>', 'URL of the application archive')
-  .option('--build-commit <commit-hash>', 'hash of the build commit matching the build archive to publish')
-  .option('--manual-version <version>', 'publishing a specific version manually (must not be already published in the registry)')
-  .option('--prepublish <script-path>', 'Hook to process parameters just before publishing, typically to upload archive on custom host')
-  .option('--postpublish <script-path>', 'Hook to process parameters just after publishing, typically to deploy app')
-  .option('--registry-url <url>', 'the registry URL to publish to a different one from the default URL')
+  .option(
+    '--build-commit <commit-hash>',
+    'hash of the build commit matching the build archive to publish'
+  )
+  .option(
+    '--manual-version <version>',
+    'publishing a specific version manually (must not be already published in the registry)'
+  )
+  .option(
+    '--prepublish <script-path>',
+    'Hook to process parameters just before publishing, typically to upload archive on custom host'
+  )
+  .option(
+    '--postpublish <script-path>',
+    'Hook to process parameters just after publishing, typically to deploy app'
+  )
+  .option(
+    '--registry-url <url>',
+    'the registry URL to publish to a different one from the default URL'
+  )
   .option('--verbose', 'print additional logs')
   .on('--help', () => {
     console.log()
     console.log(`\t--- ${colorize.bold('USAGE INFORMATIONS')} ---`)
     console.log()
-    console.log(`\tThis tool allows you to publish a Cozy application to the Cozy registry.`)
+    console.log(
+      `\tThis tool allows you to publish a Cozy application to the Cozy registry.`
+    )
   })
   .parse(process.argv)
 
@@ -63,15 +90,16 @@ try {
   process.exit(1)
 }
 
-function _getPublishMode () {
+function _getPublishMode() {
   if (process.env.TRAVIS === 'true') {
     return MODES.TRAVIS
-  } else { // default mode
+  } else {
+    // default mode
     return MODES.MANUAL
   }
 }
 
-function publishApp (cliOptions) {
+function publishApp(cliOptions) {
   const publishMode = _getPublishMode()
   if (publishMode === MODES.TRAVIS) {
     console.log()
